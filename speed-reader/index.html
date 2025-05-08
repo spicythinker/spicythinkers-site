@@ -1,1 +1,252 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Speed Reader Module</title>
+  <style>
+    :root {
+      --bg-color: #f9f9f9;
+      --text-color: #000;
+      --container-bg: #fff;
+    }
+
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --container-bg: #1e1e1e;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-size: 16px;
+      background: var(--container-bg);
+      color: var(--text-color);
+      border: 1px solid #ccc;
+    }
+
+    #readerContainer {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      background: var(--container-bg);
+    }
+
+    .word {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .fade { animation: fadeInPop 0.3s ease-out; }
+    .slide { animation: slideIn 0.3s ease-out; }
+
+    @keyframes fadeInPop {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    select, button, input, label {
+      margin-top: 10px;
+      font-size: 16px;
+      padding: 5px 10px;
+      display: inline-block;
+    }
+
+    #logOutput {
+      margin-top: 20px;
+      font-size: 14px;
+      white-space: pre-wrap;
+      background: #eee;
+      padding: 10px;
+    }
+
+    #progressBar {
+      margin-top: 10px;
+      width: 100%;
+      height: 10px;
+      background: #ddd;
+    }
+
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+    }
+  </style>
+</head>
+<body>
+  <h1>Spicy Thinkers - Speed Reader</h1>
+  <label><input type="checkbox" id="darkModeToggle"> Dark Mode</label><br>
+  <label for="fontSize">Font Size:</label>
+  <select id="fontSize">
+    <option value="40px">Very Large (Flash only)</option>
+    <option value="20px">Small</option>
+    <option value="24px" selected>Medium</option>
+    <option value="30px">Large</option>
+  </select><br>
+  <textarea id="textInput" placeholder="Paste your reading text here..."></textarea><br>
+  <label for="fileInput">Upload .txt File:</label>
+  <input type="file" id="fileInput" accept=".txt"><br>
+  <label for="mode">Display Mode:</label>
+  <select id="mode">
+    <option value="stack">Stack (Top-down)</option>
+    <option value="flash" selected>Flash (Replace each word)</option>
+  </select><br>
+  <label for="animation">Animation Style:</label>
+  <select id="animation">
+    <option value="fade">Fade</option>
+    <option value="slide">Slide</option>
+    <option value="none">None</option>
+  </select><br>
+  <label for="wpm">Words per Minute:</label>
+  <input type="number" id="wpm" value="300" min="50" max="1000"><br>
+  <button onclick="startReading()">Start</button>
+  <button onclick="pauseReading()">Pause</button>
+  <button onclick="resumeReading()">Resume</button>
+  <button onclick="resetReader()">Start Over</button>
+  <button onclick="viewLog()">View Log</button>
+
+  <div id="readerContainer"></div>
+  <div id="progressBar"><div id="progress"></div></div>
+  <div id="logOutput"></div>
+
+  <script src="SpeedReader.js"></script>
+  <script>
+    const container = document.getElementById("readerContainer");
+    const progressBar = document.getElementById("progress");
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const fontSizeSelect = document.getElementById("fontSize");
+
+    const reader = new SpeedReader(container, {
+      onComplete: (log) => {
+        console.log("Reading complete!", log);
+        updateProgress(1);
+      }
+    });
+
+    darkModeToggle.addEventListener("change", () => {
+      document.body.classList.toggle("dark-mode", darkModeToggle.checked);
+    });
+
+    fontSizeSelect.addEventListener("change", () => {
+      document.querySelectorAll('.word').forEach(el => {
+        el.style.fontSize = fontSizeSelect.value;
+      });
+    });
+
+    document.getElementById("fileInput").addEventListener("change", function () {
+      const file = this.files[0];
+      if (file && file.name.endsWith(".txt")) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("textInput").value = e.target.result;
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    function startReading() {
+      const text = document.getElementById("textInput").value;
+      const mode = document.getElementById("mode").value;
+      const wpm = parseInt(document.getElementById("wpm").value, 10);
+      const animation = document.getElementById("animation").value;
+      const fontSize = fontSizeSelect.value;
+
+      reader.setMode(mode);
+      reader.setSpeed(wpm);
+      reader.loadText(text);
+
+      const totalWords = text.trim().split(/\s+/).length;
+
+      reader.start = function () {
+        if (this.timer) clearInterval(this.timer);
+        this.container.innerHTML = "";
+        this.isPaused = false;
+        const interval = 60000 / this.wpm;
+        const displayNextWord = () => {
+          if (this.isPaused || this.index >= this.words.length) {
+            if (this.index >= this.words.length) {
+              clearInterval(this.timer);
+              this.onComplete(this.log);
+            }
+            return;
+          }
+
+          const word = this.words[this.index];
+          const el = document.createElement("div");
+          el.className = "word";
+          el.textContent = word;
+          
+          // Apply font size conditionally for flash mode if very large
+          if (fontSize === "40px" && this.mode !== "flash") {
+            el.style.fontSize = "24px";
+          } else {
+            el.style.fontSize = fontSize;
+          }
+    
+          if (animation !== "none") el.classList.add(animation);
+
+          if (this.mode === "stack") {
+            this.container.appendChild(el);
+            this.container.scrollTop = this.container.scrollHeight;
+          } else {
+            this.container.innerHTML = "";
+            this.container.appendChild(el);
+          }
+
+          this.log.push({ word, timestamp: new Date().toISOString() });
+          this.index++;
+          updateProgress(this.index / totalWords);
+        };
+
+        displayNextWord();
+        this.timer = setInterval(displayNextWord, interval);
+      };
+
+      reader.start();
+    }
+
+    function pauseReading() {
+      reader.pause();
+    }
+
+    function resumeReading() {
+      reader.resume();
+    }
+
+    function resetReader() {
+      reader.stop();
+      reader.index = 0;
+      document.getElementById("readerContainer").innerHTML = "";
+      document.getElementById("progress").style.width = "0%";
+      document.getElementById("logOutput").textContent = "";
+    }
+
+    function viewLog() {
+      const log = reader.getLog();
+      const output = log.map(entry => `• ${entry.word} @ ${entry.timestamp}`).join("\n");
+      document.getElementById("logOutput").textContent = output;
+    }
+
+    function updateProgress(fraction) {
+      progressBar.style.width = Math.round(fraction * 100) + "%";
+    }
+  </script>
+</body>
+</html>
