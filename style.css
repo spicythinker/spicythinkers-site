@@ -6,7 +6,11 @@ body {
     padding: 0;
     color: #333;
 }
-header {
+
+    header img {
+  max-height: 120px;
+  width: auto;
+}
     background: #ff6347;
     color: white;
     padding: 20px;
