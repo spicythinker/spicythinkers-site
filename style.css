@@ -23,20 +23,23 @@ textarea {
 }
 .speed-reader-button {
   display: inline-block;
-  background-color: #10b981;
+  background: linear-gradient(135deg, #10b981, #06b6d4); /* vibrant teal gradient */
   color: white;
-  padding: 12px 24px;
-  font-size: 18px;
-  border-radius: 10px;
-  text-decoration: none;
+  padding: 16px 28px;
+  font-size: 20px;
   font-weight: bold;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: none;
+  border-radius: 999px; /* full pill shape */
+  text-decoration: none;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .speed-reader-button:hover {
-  background-color: #0ea879;
-  transform: scale(1.05);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #0ea879, #0891b2); /* darker hover effect */
+}
 }
 button {
     padding: 10px 20px;
