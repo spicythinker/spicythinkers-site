@@ -21,6 +21,23 @@ textarea {
     font-size: 16px;
     margin-bottom: 10px;
 }
+.speed-reader-button {
+  display: inline-block;
+  background-color: #10b981;
+  color: white;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.speed-reader-button:hover {
+  background-color: #0ea879;
+  transform: scale(1.05);
+}
 button {
     padding: 10px 20px;
     font-size: 16px;
