@@ -7,9 +7,19 @@ body {
     color: #333;
 }
 
-    header img {
-  max-height: 120px;
-  width: auto;
+header {
+    background: #ff6347;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  header img {
+    max-height: 120px;
+    width: auto;
+    display: inline-block;
+  }
+  
 }
     background: #ff6347;
     color: white;
