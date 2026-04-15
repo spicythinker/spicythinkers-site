@@ -1,58 +1,1085 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spicy Thinkers - Learning Tools for Bright Minds</title>
-    <link rel="stylesheet" href="style.css">
-  
-<link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
-<link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png" />
-<link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png" />
-<link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png" />
-<link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
-<link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196" />
-<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
-<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-<link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128" />
-<meta name="application-name" content="&nbsp;"/>
-<meta name="msapplication-TileColor" content="#FFFFFF" />
-<meta name="msapplication-TileImage" content="mstile-144x144.png" />
-<meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
-<meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
-<meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
-<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+    <title>Spicy Thinkers - The Math Adventure Game</title>
+    <meta name="description" content="An adventure game so fun, kids forget they're learning math. Built for bright minds who think differently.">
+
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="Spicy Thinkers"/>
+    <meta name="msapplication-TileColor" content="#77a92b" />
+    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #77a92b;
+            --green-dark: #5e8a1e;
+            --green-light: #a3d44e;
+            --orange: #ff6b35;
+            --orange-light: #ff8c5a;
+            --purple: #7c3aed;
+            --purple-light: #a78bfa;
+            --teal: #0d9488;
+            --yellow: #fbbf24;
+            --bg-cream: #fefdf8;
+            --text-dark: #1a1a2e;
+            --text-muted: #4a4a6a;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Fredoka', Arial, sans-serif;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(254, 253, 248, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        nav .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        nav img {
+            height: 40px;
+            width: auto;
+        }
+
+        nav .logo-text {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        nav .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        nav .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .btn-notify {
+            display: inline-block;
+            background: var(--green);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .btn-notify:hover {
+            background: var(--green-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(119, 169, 43, 0.3);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 140px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 140%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(119, 169, 43, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 60%, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 80%, rgba(255, 107, 53, 0.04) 0%, transparent 40%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--green-light), var(--teal));
+            color: white;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            line-height: 1.15;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--orange), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 36px;
+            line-height: 1.65;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--orange), #e8553a);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            background: transparent;
+            color: var(--text-dark);
+            padding: 16px 36px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(0,0,0,0.12);
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--green);
+            background: rgba(119, 169, 43, 0.05);
+        }
+
+        /* ── GAME PREVIEW MOCKUP ── */
+        .game-preview {
+            max-width: 900px;
+            margin: 60px auto 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preview-window {
+            background: #1a1a2e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-dots {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .preview-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .preview-dots span:nth-child(1) { background: #ff5f57; }
+        .preview-dots span:nth-child(2) { background: #febc2e; }
+        .preview-dots span:nth-child(3) { background: #28c840; }
+
+        .preview-scene {
+            background: linear-gradient(180deg, #2d1b69 0%, #1a3a2a 50%, #1a3a2a 100%);
+            border-radius: 10px;
+            height: 360px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated stars */
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Scene elements */
+        .scene-ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(180deg, #2a5a3a 0%, #1e4a2e 100%);
+        }
+
+        .scene-path {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 60%;
+            background: linear-gradient(180deg, transparent, #8B7355);
+            clip-path: polygon(35% 0%, 65% 0%, 80% 100%, 20% 100%);
+            opacity: 0.5;
+        }
+
+        /* Door */
+        .scene-door {
+            position: absolute;
+            bottom: 45%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 56px;
+            height: 76px;
+            background: linear-gradient(180deg, #5a3a1a, #3d2610);
+            border-radius: 28px 28px 0 0;
+            border: 3px solid #8B7355;
+            z-index: 3;
+        }
+
+        .door-lock {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.8); }
+        }
+
+        /* Statues */
+        .statue {
+            position: absolute;
+            bottom: 38%;
+            width: 36px;
+            height: 54px;
+            z-index: 2;
+        }
+
+        .statue-left {
+            left: calc(50% - 70px);
+        }
+
+        .statue-right {
+            left: calc(50% + 34px);
+        }
+
+        .statue-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #7a7a9a, #5a5a7a);
+            border-radius: 6px 6px 2px 2px;
+            position: relative;
+        }
+
+        .statue-gems {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            width: 28px;
+            justify-content: center;
+        }
+
+        .gem {
+            width: 7px;
+            height: 7px;
+            border-radius: 2px;
+            background: var(--purple-light);
+            box-shadow: 0 0 4px rgba(167, 139, 250, 0.6);
+        }
+
+        .gem.empty {
+            background: #3a3a5a;
+            box-shadow: none;
+        }
+
+        .gem.placing {
+            background: var(--yellow);
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.8);
+            animation: gemPlace 0.6s ease-in-out infinite;
+        }
+
+        @keyframes gemPlace {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Character */
+        .scene-character {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+        }
+
+        .character-body {
+            width: 24px;
+            height: 32px;
+            background: var(--teal);
+            border-radius: 6px 6px 3px 3px;
+            position: relative;
+        }
+
+        .character-head {
+            width: 20px;
+            height: 20px;
+            background: #ffd4a8;
+            border-radius: 50%;
+            position: absolute;
+            top: -16px;
+            left: 2px;
+        }
+
+        .character-hat {
+            position: absolute;
+            top: -26px;
+            left: -2px;
+            width: 24px;
+            height: 16px;
+            background: var(--purple);
+            border-radius: 4px 4px 0 0;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        /* Gem bowl */
+        .gem-bowl {
+            position: absolute;
+            bottom: 18%;
+            left: calc(50% + 50px);
+            z-index: 4;
+        }
+
+        .bowl-body {
+            width: 30px;
+            height: 16px;
+            background: #8B7355;
+            border-radius: 0 0 15px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bowl-gems {
+            display: flex;
+            gap: 2px;
+            padding: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .bowl-gem {
+            width: 5px;
+            height: 5px;
+            background: var(--purple-light);
+            border-radius: 1px;
+            box-shadow: 0 0 3px rgba(167, 139, 250, 0.5);
+        }
+
+        /* HUD overlay */
+        .scene-hud {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 10;
+        }
+
+        .hud-equation {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            color: white;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .hud-var {
+            color: var(--yellow);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .hud-equals {
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        .hud-equals.correct {
+            color: #22c55e;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hud-stats {
+            display: flex;
+            gap: 10px;
+        }
+
+        .hud-stat {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: white;
+            font-weight: 500;
+        }
+
+        .hud-stat .coin {
+            color: var(--yellow);
+        }
+
+        /* ── SECTION: HOW IT WORKS ── */
+        section {
+            padding: 80px 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 60px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .how-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 28px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .how-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .how-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+        }
+
+        .how-card:nth-child(1) .how-icon { background: rgba(119, 169, 43, 0.12); }
+        .how-card:nth-child(2) .how-icon { background: rgba(124, 58, 237, 0.1); }
+        .how-card:nth-child(3) .how-icon { background: rgba(255, 107, 53, 0.1); }
+
+        .how-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .how-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+
+        /* ── FEATURES ── */
+        .features {
+            background: linear-gradient(180deg, #f0fdf4 0%, var(--bg-cream) 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 20px;
+            border-radius: 12px;
+            transition: background 0.2s;
+        }
+
+        .feature-item:hover {
+            background: rgba(255,255,255,0.7);
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .feature-item h4 {
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+
+        .feature-item p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ── BUILT FOR ── */
+        .built-for {
+            text-align: center;
+        }
+
+        .built-for-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .tag {
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        /* ── CTA / SIGNUP ── */
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
+            color: white;
+            border-radius: 0;
+            padding: 80px 24px;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.05rem;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .signup-form {
+            display: flex;
+            gap: 10px;
+            max-width: 440px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .signup-form input[type="email"] {
+            flex: 1;
+            min-width: 220px;
+            padding: 14px 20px;
+            border-radius: 999px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .signup-form input[type="email"]::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .signup-form input[type="email"]:focus {
+            border-color: var(--green-light);
+        }
+
+        .signup-form button {
+            padding: 14px 28px;
+            border-radius: 999px;
+            background: var(--orange);
+            color: white;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .signup-form button:hover {
+            background: var(--orange-light);
+            transform: translateY(-1px);
+        }
+
+        .signup-note {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            padding: 32px 24px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+
+        footer a {
+            color: var(--green);
+            text-decoration: none;
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 640px) {
+            nav .nav-links a:not(.btn-notify) {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 20px 60px;
+            }
+
+            .preview-scene {
+                height: 240px;
+            }
+
+            .hud-equation {
+                font-size: 0.85rem;
+                padding: 6px 10px;
+            }
+
+            .hud-stats {
+                display: none;
+            }
+
+            .scene-character, .gem-bowl {
+                transform: scale(0.85);
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <a href="/">
-      <img src="/spicythinkers-logo.png" alt="Spicy Thinkers Logo">
-    </a>
-    <p>Helping kids thrive through custom learning tools and comprehension-first thinking.</p>
-  </header>
-  
-    <main>
-        <section>
-            
-        </section>
-        <section>
-            <h2>🧠 Homework Converter</h2>
-            <p>Coming soon! Upload your child's homework and turn it into a learning game.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 Spicy Thinkers. All rights reserved.</p>
-    </footer>
-    <div style="text-align: center; margin-top: 2rem;">
-  <a href="/speed-reader/" class="speed-reader-button">
-  🧠 Try the Speed Reader Tool
-</a>
-</div>
+
+<!-- NAV -->
+<nav>
+    <div class="logo-area">
+        <img src="/spicythinkers-logo.png" alt="Spicy Thinkers">
+        <span class="logo-text">Spicy Thinkers</span>
+    </div>
+    <div class="nav-links">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#signup" class="btn-notify">Get Early Access</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">Coming Soon</div>
+        <h1>A math game so fun,<br>kids <span>forget they're learning</span></h1>
+        <p>Spicy Thinkers is an adventure game where math problems become gem puzzles, locked doors, and magical challenges. Built for kids who think differently.</p>
+        <div class="hero-cta">
+            <a href="#signup" class="btn-primary">Join the Waitlist</a>
+            <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+        </div>
+    </div>
+
+    <!-- Game Preview Mockup -->
+    <div class="game-preview">
+        <div class="preview-window">
+            <div class="preview-dots">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="preview-scene" id="previewScene">
+                <!-- Stars -->
+                <div class="star" style="top:8%;left:15%;animation-delay:0s"></div>
+                <div class="star" style="top:12%;left:45%;animation-delay:0.7s"></div>
+                <div class="star" style="top:5%;left:72%;animation-delay:1.3s"></div>
+                <div class="star" style="top:18%;left:88%;animation-delay:0.3s"></div>
+                <div class="star" style="top:22%;left:30%;animation-delay:1s"></div>
+                <div class="star" style="top:3%;left:60%;animation-delay:1.6s"></div>
+
+                <!-- HUD -->
+                <div class="scene-hud">
+                    <div class="hud-equation">
+                        <span class="hud-var" id="hudVar">x</span>
+                        <span>+ 3 =</span>
+                        <span class="hud-equals" id="hudEquals">&nbsp;9</span>
+                    </div>
+                    <div class="hud-stats">
+                        <div class="hud-stat"><span class="coin">&#9733;</span> 240 gold</div>
+                        <div class="hud-stat">Room 3 / 5</div>
+                    </div>
+                </div>
+
+                <!-- Ground -->
+                <div class="scene-ground"></div>
+                <div class="scene-path"></div>
+
+                <!-- Door -->
+                <div class="scene-door">
+                    <div class="door-lock"></div>
+                </div>
+
+                <!-- Left statue (has 3 gems) -->
+                <div class="statue statue-left">
+                    <div class="statue-body">
+                        <div class="statue-gems">
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right statue (has 9 gems) -->
+                <div class="statue statue-right">
+                    <div class="statue-body">
+                        <div class="statue-gems">
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                            <div class="gem"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Character -->
+                <div class="scene-character">
+                    <div class="character-hat"></div>
+                    <div class="character-head"></div>
+                    <div class="character-body"></div>
+                </div>
+
+                <!-- Gem bowl -->
+                <div class="gem-bowl">
+                    <div class="bowl-body">
+                        <div class="bowl-gems">
+                            <div class="bowl-gem"></div>
+                            <div class="bowl-gem"></div>
+                            <div class="bowl-gem"></div>
+                            <div class="bowl-gem"></div>
+                            <div class="bowl-gem"></div>
+                            <div class="bowl-gem"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+    <div class="section-header">
+        <h2>How Spicy Thinkers Works</h2>
+        <p>Math problems transform into physical puzzles inside an adventure game. No worksheets. No flashcards. Just a world worth exploring.</p>
+    </div>
+
+    <div class="how-grid">
+        <div class="how-card">
+            <div class="how-icon">&#127918;</div>
+            <h3>Enter the World</h3>
+            <p>Create a custom character and step into a vibrant adventure world filled with mysteries, treasures, and friendly NPCs.</p>
+        </div>
+        <div class="how-card">
+            <div class="how-icon">&#128142;</div>
+            <h3>Solve Puzzles, Not Problems</h3>
+            <p>Math equations become gem statues, locked doors, potion recipes, and bridge builders. Every problem is a physical world challenge.</p>
+        </div>
+        <div class="how-card">
+            <div class="how-icon">&#127942;</div>
+            <h3>Earn & Customize</h3>
+            <p>Complete quests to earn gold, unlock rare accessories, and customize your character. Show off your achievements in the hub world.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="features">
+    <div class="section-header">
+        <h2>Designed for Every Kind of Thinker</h2>
+        <p>We built Spicy Thinkers for the kids who don't thrive with traditional math instruction.</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-item">
+            <div class="feature-icon">&#129504;</div>
+            <div>
+                <h4>Accidental Learning</h4>
+                <p>Kids play because it's fun. Math mastery happens as a natural side effect of solving in-world puzzles.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">&#128218;</div>
+            <div>
+                <h4>Homework Forge</h4>
+                <p>Type in real homework problems and they transform into themed adventure puzzles. Practice becomes play.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">&#127912;</div>
+            <div>
+                <h4>Deep Customization</h4>
+                <p>Gender, species, clothing, hair, accessories and more. Players build a character they're proud of.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">&#128200;</div>
+            <div>
+                <h4>Smart Difficulty</h4>
+                <p>Difficulty waves up and down to prevent anxiety. No question feels impossible, and none feel boring.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">&#128241;</div>
+            <div>
+                <h4>Play Anywhere</h4>
+                <p>Works on Chromebooks, tablets, and phones. No downloads, no installs. Just open and play.</p>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">&#128106;</div>
+            <div>
+                <h4>Family & School Accounts</h4>
+                <p>Parents and teachers can track progress, assign practice, and see exactly what concepts need more work.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BUILT FOR -->
+<section class="built-for">
+    <div class="section-header">
+        <h2>Built for Bright Minds Who Think Differently</h2>
+        <p>Spicy Thinkers was created specifically for kids who struggle with traditional math instruction.</p>
+    </div>
+    <div class="built-for-tags">
+        <div class="tag">ADHD</div>
+        <div class="tag">Autism</div>
+        <div class="tag">Dyslexia</div>
+        <div class="tag">Dyscalculia</div>
+        <div class="tag">Visual Learners</div>
+        <div class="tag">Kinesthetic Learners</div>
+        <div class="tag">Gifted & Bored</div>
+        <div class="tag">Anyone Who Hates Worksheets</div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section id="signup" class="cta-section">
+    <h2>Be the First to Play</h2>
+    <p>Join the waitlist and we'll let you know when Spicy Thinkers is ready for your family or classroom.</p>
+    <form class="signup-form" id="signupForm" onsubmit="handleSignup(event)">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit">Join Waitlist</button>
+    </form>
+    <div class="signup-note">No spam, ever. Unsubscribe anytime.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>&copy; 2026 Spicy Thinkers. All rights reserved. | <a href="/speed-reader/">Speed Reader Tool</a></p>
+</footer>
+
+<script>
+    // Animate the HUD equation in the preview scene
+    const hudVar = document.getElementById('hudVar');
+    const hudEquals = document.getElementById('hudEquals');
+    let gemCount = 0;
+
+    setInterval(() => {
+        if (gemCount < 6) {
+            gemCount++;
+            hudVar.textContent = gemCount;
+            hudEquals.className = 'hud-equals';
+        }
+        if (gemCount === 6) {
+            hudEquals.className = 'hud-equals correct';
+            setTimeout(() => {
+                gemCount = 0;
+                hudVar.textContent = 'x';
+                hudEquals.className = 'hud-equals';
+            }, 2000);
+        }
+    }, 1200);
+
+    // Simple signup handler (placeholder)
+    function handleSignup(e) {
+        e.preventDefault();
+        const form = e.target;
+        const email = form.querySelector('input[type="email"]').value;
+        form.innerHTML = '<p style="color: var(--green-light); font-family: Fredoka, sans-serif; font-size: 1.2rem;">You\'re on the list! We\'ll be in touch.</p>';
+    }
+</script>
+
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"55f633dfe872485d97358548e631ae08","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
