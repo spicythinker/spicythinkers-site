@@ -1037,8 +1037,10 @@
 <section id="signup" class="cta-section">
     <h2>Be the First to Play</h2>
     <p>Join the waitlist and we'll let you know when Spicy Thinkers is ready for your family or classroom.</p>
-    <form class="signup-form" id="signupForm" onsubmit="handleSignup(event)">
-        <input type="email" placeholder="Your email address" required>
+    <form class="signup-form" id="signupForm" action="https://spicythinkers.us10.list-manage.com/subscribe/post?u=0f4fb390a586e759e2d9c0fc0&amp;id=3c15174eb6&amp;f_id=00899ce3f0" method="post" target="_blank">
+        <input type="email" name="EMAIL" placeholder="Your email address" required>
+        <!-- Bot signup prevention -->
+        <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_0f4fb390a586e759e2d9c0fc0_3c15174eb6" tabindex="-1" value=""></div>
         <button type="submit">Join Waitlist</button>
     </form>
     <div class="signup-note">No spam, ever. Unsubscribe anytime.</div>
@@ -1070,14 +1072,6 @@
             }, 2000);
         }
     }, 1200);
-
-    // Simple signup handler (placeholder)
-    function handleSignup(e) {
-        e.preventDefault();
-        const form = e.target;
-        const email = form.querySelector('input[type="email"]').value;
-        form.innerHTML = '<p style="color: var(--green-light); font-family: Fredoka, sans-serif; font-size: 1.2rem;">You\'re on the list! We\'ll be in touch.</p>';
-    }
 </script>
 
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"55f633dfe872485d97358548e631ae08","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
