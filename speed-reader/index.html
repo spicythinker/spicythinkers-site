@@ -1,252 +1,795 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Speed Reader Module</title>
+  <title>Speed Reader - Spicy Thinkers</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     :root {
-      --bg-color: #f9f9f9;
-      --text-color: #000;
-      --container-bg: #fff;
+      --green: #77a92b;
+      --green-dark: #5e8a1e;
+      --green-light: #a3d44e;
+      --orange: #ff6b35;
+      --purple: #7c3aed;
+      --purple-light: #a78bfa;
+      --teal: #0d9488;
+      --yellow: #fbbf24;
+      --bg: #fefdf8;
+      --text: #1a1a2e;
+      --text-muted: #4a4a6a;
+      --card-bg: #ffffff;
+      --border: rgba(0,0,0,0.08);
+      --reader-bg: #ffffff;
+      --input-bg: #ffffff;
+      --progress-track: #e8e8ee;
+      --log-bg: #f5f5fa;
     }
 
     body.dark-mode {
-      --bg-color: #121212;
-      --text-color: #f0f0f0;
-      --container-bg: #1e1e1e;
+      --bg: #0f0f1a;
+      --text: #f0f0f5;
+      --text-muted: #a0a0b8;
+      --card-bg: #1a1a2e;
+      --border: rgba(255,255,255,0.08);
+      --reader-bg: #12122a;
+      --input-bg: #1a1a2e;
+      --progress-track: #2a2a3e;
+      --log-bg: #1a1a2e;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: var(--bg-color);
-      color: var(--text-color);
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    textarea {
+    h1, h2, h3, h4 {
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: rgba(254, 253, 248, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    body.dark-mode nav {
+      background: rgba(15, 15, 26, 0.95);
+    }
+
+    nav .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    nav img {
+      height: 36px;
+      width: auto;
+    }
+
+    nav .logo-text {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    nav .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--green);
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 24px 60px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    /* ── CONTROLS CARD ── */
+    .controls-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .control-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .control-group select,
+    .control-group input[type="number"] {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .control-group select:focus,
+    .control-group input:focus {
+      border-color: var(--green);
+    }
+
+    /* ── TEXT INPUT ── */
+    .text-input-area {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .text-input-area textarea {
       width: 100%;
       height: 100px;
-      font-size: 16px;
-      background: var(--container-bg);
-      color: var(--text-color);
-      border: 1px solid #ccc;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      line-height: 1.5;
+    }
+
+    .text-input-area textarea::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    .text-input-area textarea:focus {
+      border-color: var(--green);
+    }
+
+    .input-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .file-upload {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .file-upload label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px dashed var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .file-upload label:hover {
+      border-color: var(--green);
+      background: rgba(119, 169, 43, 0.05);
+    }
+
+    .file-upload input[type="file"] {
+      display: none;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Dark mode toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--progress-track);
+      border-radius: 24px;
+      transition: background 0.3s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: var(--purple);
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(20px);
+    }
+
+    .toggle-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ── BUTTONS ── */
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: white;
+      box-shadow: 0 3px 10px rgba(119, 169, 43, 0.3);
+    }
+
+    .btn-start:hover {
+      box-shadow: 0 5px 18px rgba(119, 169, 43, 0.4);
+    }
+
+    .btn-pause {
+      background: linear-gradient(135deg, var(--orange), #e8553a);
+      color: white;
+      box-shadow: 0 3px 10px rgba(255, 107, 53, 0.25);
+    }
+
+    .btn-resume {
+      background: linear-gradient(135deg, var(--teal), #0a7a70);
+      color: white;
+      box-shadow: 0 3px 10px rgba(13, 148, 136, 0.25);
+    }
+
+    .btn-reset {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-reset:hover {
+      border-color: var(--text-muted);
+      background: rgba(0,0,0,0.03);
+    }
+
+    .btn-log {
+      background: transparent;
+      color: var(--purple);
+      border: 1px solid var(--purple);
+    }
+
+    .btn-log:hover {
+      background: rgba(124, 58, 237, 0.05);
+    }
+
+    /* ── READER DISPLAY ── */
+    .reader-card {
+      background: var(--reader-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    .reader-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.015);
+    }
+
+    body.dark-mode .reader-header {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .reader-status {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .reader-status.active {
+      color: var(--green);
+    }
+
+    .reader-wpm-display {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
     }
 
     #readerContainer {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      height: 300px;
+      height: 280px;
       overflow-y: auto;
-      background: var(--container-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #readerContainer.stack-mode {
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
     }
 
     .word {
       text-align: center;
-      margin: 10px 0;
+      width: 100%;
+      color: var(--text);
+      line-height: 1.3;
     }
 
-    .fade { animation: fadeInPop 0.3s ease-out; }
-    .slide { animation: slideIn 0.3s ease-out; }
+    .fade { animation: fadeInPop 0.25s ease-out; }
+    .slide { animation: slideIn 0.25s ease-out; }
 
     @keyframes fadeInPop {
-      from { opacity: 0; transform: scale(0.9); }
+      from { opacity: 0; transform: scale(0.85); }
       to { opacity: 1; transform: scale(1); }
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    select, button, input, label {
-      margin-top: 10px;
-      font-size: 16px;
-      padding: 5px 10px;
-      display: inline-block;
+    .reader-placeholder {
+      color: var(--text-muted);
+      opacity: 0.4;
+      font-size: 1.1rem;
+      text-align: center;
+      font-family: 'Fredoka', sans-serif;
     }
 
-    #logOutput {
-      margin-top: 20px;
-      font-size: 14px;
-      white-space: pre-wrap;
-      background: #eee;
-      padding: 10px;
-    }
-
-    #progressBar {
-      margin-top: 10px;
-      width: 100%;
-      height: 10px;
-      background: #ddd;
+    /* ── PROGRESS BAR ── */
+    .progress-bar {
+      height: 6px;
+      background: var(--progress-track);
+      border-radius: 0 0 16px 16px;
+      overflow: hidden;
     }
 
     #progress {
       height: 100%;
       width: 0%;
-      background: #4caf50;
+      background: linear-gradient(90deg, var(--green), var(--green-light));
+      border-radius: 0 3px 3px 0;
+      transition: width 0.15s ease-out;
+    }
+
+    /* ── LOG ── */
+    .log-output {
+      background: var(--log-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .log-output.visible {
+      display: block;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      .page-wrapper {
+        padding: 20px 16px 40px;
+      }
+
+      .page-header h1 {
+        font-size: 1.6rem;
+      }
+
+      .controls-row {
+        flex-direction: column;
+      }
+
+      .control-group {
+        min-width: 100%;
+      }
+
+      .button-row {
+        justify-content: center;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 80px;
+        padding: 12px 16px;
+        font-size: 0.85rem;
+      }
+
+      #readerContainer {
+        height: 220px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Spicy Thinkers - Speed Reader</h1>
-  <label><input type="checkbox" id="darkModeToggle"> Dark Mode</label><br>
-  <label for="fontSize">Font Size:</label>
-  <select id="fontSize">
-    <option value="40px">Very Large (Flash only)</option>
-    <option value="20px">Small</option>
-    <option value="24px" selected>Medium</option>
-    <option value="30px">Large</option>
-  </select><br>
-  <textarea id="textInput" placeholder="Paste your reading text here..."></textarea><br>
-  <label for="fileInput">Upload .txt File:</label>
-  <input type="file" id="fileInput" accept=".txt"><br>
-  <label for="mode">Display Mode:</label>
-  <select id="mode">
-    <option value="stack">Stack (Top-down)</option>
-    <option value="flash" selected>Flash (Replace each word)</option>
-  </select><br>
-  <label for="animation">Animation Style:</label>
-  <select id="animation">
-    <option value="fade">Fade</option>
-    <option value="slide">Slide</option>
-    <option value="none">None</option>
-  </select><br>
-  <label for="wpm">Words per Minute:</label>
-  <input type="number" id="wpm" value="300" min="50" max="1000"><br>
-  <button onclick="startReading()">Start</button>
-  <button onclick="pauseReading()">Pause</button>
-  <button onclick="resumeReading()">Resume</button>
-  <button onclick="resetReader()">Start Over</button>
-  <button onclick="viewLog()">View Log</button>
 
-  <div id="readerContainer"></div>
-  <div id="progressBar"><div id="progress"></div></div>
-  <div id="logOutput"></div>
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo-area">
+    <img src="/spicythinkers-logo.png" alt="Spicy Thinkers">
+    <span class="logo-text">Spicy Thinkers</span>
+  </a>
+  <div class="nav-right">
+    <a href="/" class="back-link">&larr; Back to Home</a>
+  </div>
+</nav>
 
-  <script src="SpeedReader.js"></script>
-  <script>
-    const container = document.getElementById("readerContainer");
-    const progressBar = document.getElementById("progress");
-    const darkModeToggle = document.getElementById("darkModeToggle");
-    const fontSizeSelect = document.getElementById("fontSize");
+<div class="page-wrapper">
 
-    const reader = new SpeedReader(container, {
-      onComplete: (log) => {
-        console.log("Reading complete!", log);
-        updateProgress(1);
-      }
+  <!-- HEADER -->
+  <div class="page-header">
+    <h1>Speed Reader</h1>
+    <p>Paste any text and read it one word at a time. Faster reading, no losing your place. Adjust the speed to find your sweet spot.</p>
+  </div>
+
+  <!-- TEXT INPUT -->
+  <div class="text-input-area">
+    <textarea id="textInput" placeholder="Paste your reading text here... homework, articles, book chapters, anything."></textarea>
+    <div class="input-footer">
+      <div class="file-upload">
+        <label for="fileInput">Upload .txt file</label>
+        <input type="file" id="fileInput" accept=".txt">
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">Dark Mode</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls-card">
+    <div class="controls-row">
+      <div class="control-group">
+        <label for="wpm">Words / Min</label>
+        <input type="number" id="wpm" value="300" min="50" max="1000">
+      </div>
+      <div class="control-group">
+        <label for="mode">Display Mode</label>
+        <select id="mode">
+          <option value="flash" selected>Flash (one word)</option>
+          <option value="stack">Stack (top-down)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="fontSize">Font Size</label>
+        <select id="fontSize">
+          <option value="20px">Small</option>
+          <option value="24px">Medium</option>
+          <option value="32px" selected>Large</option>
+          <option value="44px">Extra Large</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="animation">Animation</label>
+        <select id="animation">
+          <option value="fade" selected>Fade</option>
+          <option value="slide">Slide</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="button-row">
+    <button class="btn btn-start" onclick="startReading()">Start</button>
+    <button class="btn btn-pause" onclick="pauseReading()">Pause</button>
+    <button class="btn btn-resume" onclick="resumeReading()">Resume</button>
+    <button class="btn btn-reset" onclick="resetReader()">Start Over</button>
+    <button class="btn btn-log" onclick="viewLog()">View Log</button>
+  </div>
+
+  <!-- READER DISPLAY -->
+  <div class="reader-card">
+    <div class="reader-header">
+      <span class="reader-status" id="readerStatus">Ready</span>
+      <span class="reader-wpm-display" id="wpmDisplay">300 WPM</span>
+    </div>
+    <div id="readerContainer">
+      <div class="reader-placeholder">Your text will appear here</div>
+    </div>
+    <div class="progress-bar">
+      <div id="progress"></div>
+    </div>
+  </div>
+
+  <!-- LOG OUTPUT -->
+  <div class="log-output" id="logOutput"></div>
+
+</div>
+
+<script src="SpeedReader.js"></script>
+<script>
+  const container = document.getElementById("readerContainer");
+  const progressBar = document.getElementById("progress");
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  const fontSizeSelect = document.getElementById("fontSize");
+  const statusEl = document.getElementById("readerStatus");
+  const wpmDisplay = document.getElementById("wpmDisplay");
+
+  const reader = new SpeedReader(container, {
+    onComplete: (log) => {
+      updateProgress(1);
+      statusEl.textContent = "Complete";
+      statusEl.className = "reader-status";
+    }
+  });
+
+  // Dark mode toggle
+  darkModeToggle.addEventListener("change", () => {
+    document.body.classList.toggle("dark-mode", darkModeToggle.checked);
+  });
+
+  // Font size live update
+  fontSizeSelect.addEventListener("change", () => {
+    document.querySelectorAll('.word').forEach(el => {
+      el.style.fontSize = fontSizeSelect.value;
     });
+  });
 
-    darkModeToggle.addEventListener("change", () => {
-      document.body.classList.toggle("dark-mode", darkModeToggle.checked);
-    });
+  // WPM display update
+  document.getElementById("wpm").addEventListener("input", (e) => {
+    wpmDisplay.textContent = e.target.value + " WPM";
+  });
 
-    fontSizeSelect.addEventListener("change", () => {
-      document.querySelectorAll('.word').forEach(el => {
-        el.style.fontSize = fontSizeSelect.value;
-      });
-    });
+  // File upload
+  document.getElementById("fileInput").addEventListener("change", function () {
+    const file = this.files[0];
+    if (file && file.name.endsWith(".txt")) {
+      const fr = new FileReader();
+      fr.onload = function (e) {
+        document.getElementById("textInput").value = e.target.result;
+      };
+      fr.readAsText(file);
+    }
+  });
 
-    document.getElementById("fileInput").addEventListener("change", function () {
-      const file = this.files[0];
-      if (file && file.name.endsWith(".txt")) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          document.getElementById("textInput").value = e.target.result;
-        };
-        reader.readAsText(file);
-      }
-    });
+  function startReading() {
+    const text = document.getElementById("textInput").value;
+    if (!text.trim()) return;
 
-    function startReading() {
-      const text = document.getElementById("textInput").value;
-      const mode = document.getElementById("mode").value;
-      const wpm = parseInt(document.getElementById("wpm").value, 10);
-      const animation = document.getElementById("animation").value;
-      const fontSize = fontSizeSelect.value;
+    const mode = document.getElementById("mode").value;
+    const wpm = parseInt(document.getElementById("wpm").value, 10);
+    const animation = document.getElementById("animation").value;
+    const fontSize = fontSizeSelect.value;
 
-      reader.setMode(mode);
-      reader.setSpeed(wpm);
-      reader.loadText(text);
+    reader.setMode(mode);
+    reader.setSpeed(wpm);
+    reader.loadText(text);
 
-      const totalWords = text.trim().split(/\s+/).length;
+    // Update UI
+    statusEl.textContent = "Reading";
+    statusEl.className = "reader-status active";
+    wpmDisplay.textContent = wpm + " WPM";
+    container.className = mode === "stack" ? "stack-mode" : "";
 
-      reader.start = function () {
-        if (this.timer) clearInterval(this.timer);
-        this.container.innerHTML = "";
-        this.isPaused = false;
-        const interval = 60000 / this.wpm;
-        const displayNextWord = () => {
-          if (this.isPaused || this.index >= this.words.length) {
-            if (this.index >= this.words.length) {
-              clearInterval(this.timer);
-              this.onComplete(this.log);
-            }
-            return;
+    const totalWords = text.trim().split(/\s+/).length;
+
+    reader.start = function () {
+      if (this.timer) clearInterval(this.timer);
+      this.container.innerHTML = "";
+      this.isPaused = false;
+      const interval = 60000 / this.wpm;
+
+      const displayNextWord = () => {
+        if (this.isPaused || this.index >= this.words.length) {
+          if (this.index >= this.words.length) {
+            clearInterval(this.timer);
+            this.onComplete(this.log);
           }
+          return;
+        }
 
-          const word = this.words[this.index];
-          const el = document.createElement("div");
-          el.className = "word";
-          el.textContent = word;
-          
-          // Apply font size conditionally for flash mode if very large
-          if (fontSize === "40px" && this.mode !== "flash") {
-            el.style.fontSize = "24px";
-          } else {
-            el.style.fontSize = fontSize;
-          }
-    
-          if (animation !== "none") el.classList.add(animation);
+        const word = this.words[this.index];
+        const el = document.createElement("div");
+        el.className = "word";
+        el.textContent = word;
+        el.style.fontSize = fontSize;
 
-          if (this.mode === "stack") {
-            this.container.appendChild(el);
-            this.container.scrollTop = this.container.scrollHeight;
-          } else {
-            this.container.innerHTML = "";
-            this.container.appendChild(el);
-          }
+        if (animation !== "none") el.classList.add(animation);
 
-          this.log.push({ word, timestamp: new Date().toISOString() });
-          this.index++;
-          updateProgress(this.index / totalWords);
-        };
+        if (this.mode === "stack") {
+          this.container.appendChild(el);
+          this.container.scrollTop = this.container.scrollHeight;
+        } else {
+          this.container.innerHTML = "";
+          this.container.appendChild(el);
+        }
 
-        displayNextWord();
-        this.timer = setInterval(displayNextWord, interval);
+        this.log.push({ word, timestamp: new Date().toISOString() });
+        this.index++;
+        updateProgress(this.index / totalWords);
       };
 
-      reader.start();
-    }
+      displayNextWord();
+      this.timer = setInterval(displayNextWord, interval);
+    };
 
-    function pauseReading() {
-      reader.pause();
-    }
+    reader.start();
+  }
 
-    function resumeReading() {
-      reader.resume();
-    }
+  function pauseReading() {
+    reader.pause();
+    statusEl.textContent = "Paused";
+    statusEl.className = "reader-status";
+  }
 
-    function resetReader() {
-      reader.stop();
-      reader.index = 0;
-      document.getElementById("readerContainer").innerHTML = "";
-      document.getElementById("progress").style.width = "0%";
-      document.getElementById("logOutput").textContent = "";
-    }
+  function resumeReading() {
+    reader.resume();
+    statusEl.textContent = "Reading";
+    statusEl.className = "reader-status active";
+  }
 
-    function viewLog() {
-      const log = reader.getLog();
-      const output = log.map(entry => `• ${entry.word} @ ${entry.timestamp}`).join("\n");
-      document.getElementById("logOutput").textContent = output;
-    }
+  function resetReader() {
+    reader.stop();
+    reader.index = 0;
+    container.innerHTML = '<div class="reader-placeholder">Your text will appear here</div>';
+    container.className = "";
+    progressBar.style.width = "0%";
+    document.getElementById("logOutput").textContent = "";
+    document.getElementById("logOutput").classList.remove("visible");
+    statusEl.textContent = "Ready";
+    statusEl.className = "reader-status";
+  }
 
-    function updateProgress(fraction) {
-      progressBar.style.width = Math.round(fraction * 100) + "%";
+  function viewLog() {
+    const logEl = document.getElementById("logOutput");
+    const log = reader.getLog();
+    if (log.length === 0) {
+      logEl.textContent = "No reading data yet. Start reading first.";
+    } else {
+      const output = log.map(entry => `${entry.word}  @  ${entry.timestamp}`).join("\n");
+      logEl.textContent = output;
     }
-  </script>
+    logEl.classList.toggle("visible");
+  }
+
+  function updateProgress(fraction) {
+    progressBar.style.width = Math.round(fraction * 100) + "%";
+  }
+</script>
+
 </body>
 </html>
