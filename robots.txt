@@ -1,0 +1,19 @@
+# robots.txt for Spicy Thinkers
+# https://spicythinkers.com
+
+User-agent: *
+Allow: /
+
+# Block crawlers from internal/dev directories
+Disallow: /math-game/
+Disallow: /.claude/
+
+# AI bots welcome to read for understanding (not training)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://spicythinkers.com/sitemap.xml
