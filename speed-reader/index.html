@@ -504,6 +504,102 @@
       display: block;
     }
 
+    /* ── INFO SECTION ── */
+    .info-section {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .info-section h2 {
+      font-size: 1.6rem;
+      color: var(--text);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .info-section .info-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 32px;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.55;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+
+    .info-card .info-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 14px;
+    }
+
+    .info-card:nth-child(1) .info-icon { background: rgba(119, 169, 43, 0.12); }
+    .info-card:nth-child(2) .info-icon { background: rgba(124, 58, 237, 0.12); }
+    .info-card:nth-child(3) .info-icon { background: rgba(255, 107, 53, 0.12); }
+    .info-card:nth-child(4) .info-icon { background: rgba(13, 148, 136, 0.12); }
+
+    .info-card h3 {
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .info-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .info-explainer {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .info-explainer h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .info-explainer p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .info-explainer p:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-explainer .highlight {
+      color: var(--green);
+      font-weight: 600;
+    }
+
     /* ── MOBILE ── */
     @media (max-width: 600px) {
       .page-wrapper {
@@ -557,7 +653,7 @@
   <!-- HEADER -->
   <div class="page-header">
     <h1>Speed Reader</h1>
-    <p>Paste any text and read it one word at a time. Faster reading, no losing your place. Adjust the speed to find your sweet spot.</p>
+    <p>Read faster using <strong>Rapid Serial Visual Presentation (RSVP)</strong> — a proven technique that flashes one word at a time so your eyes never have to track across the page.</p>
   </div>
 
   <!-- TEXT INPUT -->
@@ -637,6 +733,42 @@
 
   <!-- LOG OUTPUT -->
   <div class="log-output" id="logOutput"></div>
+
+  <!-- INFO SECTION -->
+  <div class="info-section">
+    <h2>How RSVP Works</h2>
+    <p class="info-subtitle">Rapid Serial Visual Presentation is a reading technique backed by decades of research. It removes the slowest part of reading — your eyes.</p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">&#128064;</div>
+        <h3>No Eye Movement</h3>
+        <p>Traditional reading requires your eyes to jump (saccade) across the page. Each jump takes ~200ms. RSVP eliminates this entirely — words come to you, one at a time, in the same spot.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">&#9889;</div>
+        <h3>2-3x Faster</h3>
+        <p>Average reading speed is 200-300 WPM. With RSVP, most people can comfortably read at 400-600 WPM, with practice reaching 800+ WPM, while still understanding the text.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">&#128205;</div>
+        <h3>Never Lose Your Place</h3>
+        <p>For readers with ADHD, dyslexia, or visual tracking difficulties, losing your spot mid-sentence is exhausting. RSVP shows you exactly where you are — every time.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">&#129504;</div>
+        <h3>Better Focus</h3>
+        <p>Because words appear one at a time, your brain can't skip ahead or get distracted by what's coming next. This forced focus often improves comprehension, not just speed.</p>
+      </div>
+    </div>
+
+    <div class="info-explainer">
+      <h3>Why we built this</h3>
+      <p>Reading homework is exhausting for many neurodivergent students. The act of tracking eyes across paragraphs — re-reading the same line, losing your place, getting distracted by surrounding text — can make a 10-minute reading assignment feel like an hour of work.</p>
+      <p>RSVP doesn't replace traditional reading — it's a tool. <span class="highlight">Use it for dense homework readings, articles, study notes, or any text where comprehension matters more than enjoyment.</span> Many students find they can complete reading assignments in a fraction of the time, with less mental fatigue, leaving more energy for actually understanding the material.</p>
+      <p>Start at 250-300 WPM and increase by 50 WPM as you get comfortable. Most readers can sustain 400-500 WPM after just a few sessions.</p>
+    </div>
+  </div>
 
 </div>
 
