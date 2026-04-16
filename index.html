@@ -776,6 +776,91 @@
             color: rgba(255,255,255,0.4);
         }
 
+        /* ── SUPPORT SECTION ── */
+        .support-section {
+            background: linear-gradient(135deg, #fff8ed 0%, #fff2e0 100%);
+            text-align: center;
+        }
+
+        .support-card {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 48px 36px;
+            box-shadow: 0 4px 24px rgba(255, 107, 53, 0.08);
+            border: 1px solid rgba(255, 107, 53, 0.12);
+        }
+
+        .support-emoji {
+            font-size: 3rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .support-card h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+            margin-bottom: 14px;
+            color: var(--text-dark);
+        }
+
+        .support-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.65;
+            margin-bottom: 16px;
+        }
+
+        .support-uses {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin: 24px 0 32px;
+            padding: 20px;
+            background: var(--bg-cream);
+            border-radius: 12px;
+        }
+
+        .support-use {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .btn-coffee {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #ff6b35, #e8553a);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-coffee:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .support-disclaimer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.75;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
         /* ── FOOTER ── */
         footer {
             text-align: center;
@@ -830,6 +915,7 @@
     <div class="nav-links">
         <a href="#tools">Tools</a>
         <a href="#features">Features</a>
+        <a href="#support">Support</a>
         <a href="#signup" class="btn-notify">Get Early Access</a>
     </div>
 </nav>
@@ -1033,6 +1119,29 @@
         <div class="tag">Kinesthetic Learners</div>
         <div class="tag">Gifted & Bored</div>
         <div class="tag">Anyone Who Hates Worksheets</div>
+    </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support" class="support-section">
+    <div class="support-card">
+        <span class="support-emoji">&#9749;</span>
+        <h2>Help Build Spicy Thinkers</h2>
+        <p>Spicy Thinkers is built by one person, between life and work, with a lot of stubbornness and a belief that learning shouldn't feel like punishment.</p>
+        <p>If our mission resonates with you — if you've ever watched a kid you love struggle with homework that wasn't designed for the way they think — your support helps keep this dream moving forward.</p>
+
+        <div class="support-uses">
+            <div class="support-use">&#127912; Custom artwork</div>
+            <div class="support-use">&#9889; Hosting &amp; tools</div>
+            <div class="support-use">&#129504; AI features</div>
+            <div class="support-use">&#9203; Development time</div>
+        </div>
+
+        <a href="https://buymeacoffee.com/spicythinkers" target="_blank" rel="noopener" class="btn-coffee">
+            <span>&#9749;</span> Buy Me a Coffee
+        </a>
+
+        <p class="support-disclaimer">Spicy Thinkers is not a registered nonprofit. Contributions are not tax-deductible and go directly toward platform development. Thank you for believing in this mission.</p>
     </div>
 </section>
 
