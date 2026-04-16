@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2080 520" width="2080" height="520">
+  <title>Spicy Thinkers — Buy Me a Coffee cover</title>
+  <desc>Cover banner for buymeacoffee.com/spicythinkers. 4:1 aspect ratio, 2080x520.</desc>
+
+  <!-- ============ PALETTE ============
+       Brand green: #77a92b
+       Deep green:  #2d3a1f (ink)
+       Warm cream:  #fdf8ec
+       Accent red:  #e06a43 (chili)
+       Accent gold: #f4b942 (spark)
+  =================================== -->
+
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fdf8ec"/>
+      <stop offset="100%" stop-color="#f5ecd4"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8dc23a"/>
+      <stop offset="100%" stop-color="#77a92b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ============ BACKGROUND ============ -->
+  <rect width="2080" height="520" fill="url(#bgGradient)"/>
+  <circle cx="200" cy="-60" r="260" fill="#77a92b" opacity="0.08"/>
+  <circle cx="1950" cy="580" r="300" fill="#77a92b" opacity="0.10"/>
+  <circle cx="1700" cy="80" r="140" fill="#f4b942" opacity="0.12"/>
+
+  <!-- ============ TEXT BLOCK (left) ============ -->
+  <text x="140" y="80" font-family="Fredoka, 'Trebuchet MS', system-ui, sans-serif" font-size="28" font-weight="600" letter-spacing="6" fill="#77a92b">SPICY THINKERS</text>
+
+  <text x="140" y="200" font-family="Fredoka, 'Trebuchet MS', system-ui, sans-serif" font-size="100" font-weight="700" fill="#2d3a1f">Fuel for</text>
+  <text x="140" y="310" font-family="Fredoka, 'Trebuchet MS', system-ui, sans-serif" font-size="96" font-weight="700" fill="url(#greenGrad)">neuro-spicy minds.</text>
+
+  <text x="140" y="385" font-family="Inter, 'Helvetica Neue', system-ui, sans-serif" font-size="28" font-weight="500" fill="#4a5a2f">Learning tools for kids with ADHD, autism, dyslexia, dyscalculia</text>
+  <text x="140" y="425" font-family="Inter, 'Helvetica Neue', system-ui, sans-serif" font-size="28" font-weight="500" fill="#4a5a2f">&amp; bright minds who think differently.</text>
+
+  <!-- ============ SPARKLES (background accents) ============ -->
+  <g fill="#f4b942">
+    <path d="M 1380 180 L 1395 210 L 1425 225 L 1395 240 L 1380 270 L 1365 240 L 1335 225 L 1365 210 Z" opacity="0.7"/>
+    <path d="M 1930 390 L 1940 410 L 1960 420 L 1940 430 L 1930 450 L 1920 430 L 1900 420 L 1920 410 Z" opacity="0.7"/>
+    <path d="M 1440 420 L 1448 436 L 1464 444 L 1448 452 L 1440 468 L 1432 452 L 1416 444 L 1432 436 Z" opacity="0.6"/>
+    <path d="M 1850 110 L 1856 122 L 1868 128 L 1856 134 L 1850 146 L 1844 134 L 1832 128 L 1844 122 Z" opacity="0.55"/>
+  </g>
+
+  <!-- ============ LOGO (right) ============ -->
+  <image href="../spicythinkers-logo.png" xlink:href="../spicythinkers-logo.png" x="1540" y="30" width="460" height="460"/>
+
+  <!-- ============ URL ============ -->
+  <text x="1940" y="492" text-anchor="end" font-family="Inter, 'Helvetica Neue', system-ui, sans-serif" font-size="24" font-weight="500" fill="#77a92b" opacity="0.85">spicythinkers.com</text>
+</svg>
