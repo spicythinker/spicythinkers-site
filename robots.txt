@@ -1,5 +1,5 @@
 # robots.txt for Spicy Thinkers
-# https://spicythinkers.com
+# https://www.spicythinkers.com
 
 User-agent: *
 Allow: /
@@ -16,4 +16,4 @@ User-agent: ClaudeBot
 Allow: /
 
 # Sitemap location
-Sitemap: https://spicythinkers.com/sitemap.xml
+Sitemap: https://www.spicythinkers.com/sitemap.xml
