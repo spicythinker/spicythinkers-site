@@ -90,7 +90,8 @@
       background: rgba(254, 253, 248, 0.95);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      padding: 0 24px;
+      height: 130px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -103,20 +104,22 @@
     nav .logo-area {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       text-decoration: none;
+      height: 100%;
     }
 
     nav img {
-      height: 36px;
+      height: 90%;
       width: auto;
     }
 
     nav .logo-text {
       font-family: 'Fredoka', sans-serif;
-      font-size: 1.2rem;
+      font-size: 2.6rem;
       font-weight: 700;
       color: var(--green);
+      line-height: 1.1;
     }
 
     nav .nav-right {
@@ -194,6 +197,43 @@
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+    }
+
+    .control-group input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--progress-track);
+      outline: none;
+      margin-top: 8px;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(119, 169, 43, 0.4);
+      transition: transform 0.15s;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .control-group input[type="range"]::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 6px rgba(119, 169, 43, 0.4);
     }
 
     .control-group select,
@@ -666,8 +706,8 @@
 <!-- NAV -->
 <nav>
   <a href="/" class="logo-area">
-    <img src="/spicythinkers-logo.png" alt="Spicy Thinkers">
-    <span class="logo-text">Spicy Thinkers</span>
+    <img src="/spicythinkers-logo.png" alt="Spicy Thinkers" width="90" height="90">
+    <span class="logo-text">Spicy<br>Thinkers</span>
   </a>
   <div class="nav-right">
     <a href="/" class="back-link">&larr; Back to Home</a>
@@ -704,8 +744,8 @@
   <div class="controls-card">
     <div class="controls-row">
       <div class="control-group">
-        <label for="wpm">Words / Min</label>
-        <input type="number" id="wpm" value="300" min="50" max="1000">
+        <label for="wpm">Words / Min — <span id="wpmValue">300</span></label>
+        <input type="range" id="wpm" value="300" min="50" max="1000" step="25">
       </div>
       <div class="control-group">
         <label for="mode">Display Mode</label>
@@ -828,8 +868,11 @@
   });
 
   // WPM display update
-  document.getElementById("wpm").addEventListener("input", (e) => {
+  const wpmSlider = document.getElementById("wpm");
+  const wpmValueLabel = document.getElementById("wpmValue");
+  wpmSlider.addEventListener("input", (e) => {
     wpmDisplay.textContent = e.target.value + " WPM";
+    wpmValueLabel.textContent = e.target.value;
   });
 
   // File upload
