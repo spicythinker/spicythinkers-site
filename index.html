@@ -164,8 +164,8 @@
             position: fixed;
             top: 48px;
             left: 48px;
-            width: 160px;
-            height: 160px;
+            width: 320px;
+            height: 320px;
             z-index: 200; /* above nav (100) */
             display: block;
             line-height: 0;
@@ -176,6 +176,7 @@
             width: 100%;
             height: 100%;
             display: block;
+            object-fit: contain; /* guarantee no clipping regardless of aspect ratio */
         }
 
         .brand-mark:hover {
@@ -963,10 +964,10 @@
         /* ── MOBILE ── */
         @media (max-width: 640px) {
             .brand-mark {
-                width: 110px;
-                height: 110px;
-                top: 12px;
-                left: 12px;
+                width: 220px;
+                height: 220px;
+                top: 20px;
+                left: 20px;
             }
 
             nav .nav-links a:not(.btn-notify) {
