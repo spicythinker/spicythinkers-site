@@ -156,23 +156,37 @@
             justify-content: space-between;
         }
 
-        nav .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            text-decoration: none;
-            height: 100%;
+        /* Floating brand mark — fixed in upper-left, layered ON TOP of the nav.
+           Sits slightly below the top edge, extends past the nav bar, and its
+           bottom lands roughly halfway to the hero h1. Tune these four numbers
+           together if the logo needs to grow or shrink. */
+        .brand-mark {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            width: 160px;
+            height: 160px;
+            z-index: 200; /* above nav (100) */
+            display: block;
+            line-height: 0;
+            transition: transform 0.2s ease;
         }
 
-        nav img {
-            height: 90%;
-            width: auto;
+        .brand-mark img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .brand-mark:hover {
+            transform: scale(1.03);
         }
 
         nav .nav-links {
             display: flex;
             gap: 24px;
             align-items: center;
+            margin-left: auto; /* push to the right; floating logo occupies the left */
         }
 
         nav .nav-links a {
@@ -948,6 +962,13 @@
 
         /* ── MOBILE ── */
         @media (max-width: 640px) {
+            .brand-mark {
+                width: 110px;
+                height: 110px;
+                top: 12px;
+                left: 12px;
+            }
+
             nav .nav-links a:not(.btn-notify) {
                 display: none;
             }
@@ -977,11 +998,13 @@
 </head>
 <body>
 
+<!-- BRAND MARK (floats above the nav, fixed in the top-left corner) -->
+<a href="/" class="brand-mark" aria-label="Spicy Thinkers home">
+    <img src="/spicythinkers-logo.png" alt="Spicy Thinkers - learning tools for neurodivergent kids" loading="eager">
+</a>
+
 <!-- NAV -->
 <nav>
-    <a href="/" class="logo-area" aria-label="Spicy Thinkers home">
-        <img src="/spicythinkers-logo.png" alt="Spicy Thinkers - learning tools for neurodivergent kids" width="90" height="90" loading="eager">
-    </a>
     <div class="nav-links">
         <a href="#tools">Tools</a>
         <a href="#features">Features</a>
