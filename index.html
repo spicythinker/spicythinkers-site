@@ -1043,16 +1043,19 @@
             { cls: 'cloud-1', top: '57%', left: '55%', rate: -0.45 },
             // cloud-2 stays within the SKY / cloud field the entire time it's
             // visible — it never drifts down into the mountains or village.
-            //   startTopPct 116 → just below the fold at scroll=0 (hidden).
-            //   endTopPct   -64 → well above the viewport by max scroll.
-            // Linear top(p) = 116 + (-180)*p, so during its visible window:
+            // Tuned so it lingers on screen a bit longer, and slightly lower,
+            // before drifting off the top.
+            //   startTopPct 108 → just under the fold at scroll=0 (hidden).
+            //   endTopPct   -31 → off the top by max scroll.
+            // Linear top(p) = 108 + (-139)*p, so during its visible window:
             //   p≈0.20 → top 80%  (entering from bottom of sky band)
-            //   p≈0.45 → top 35%  (drifting through upper sky)
-            //   p≈0.70 → top -10% (exiting off the top, before village)
+            //   p≈0.45 → top 45%  (drifting through mid-upper sky)
+            //   p≈0.70 → top 11%  (still on-screen, upper sky)
+            //   p≈0.85 → top -10% (exiting off the top, before village)
             // Horizontal center ~38% (left of screen center, between the
             // Math Adventure and Speed Reader cards).
             { cls: 'cloud-2', left: '30%',
-              startTopPct: 116, endTopPct: -64 },
+              startTopPct: 108, endTopPct: -31 },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
