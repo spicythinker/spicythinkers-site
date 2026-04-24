@@ -1144,7 +1144,9 @@
         // border strips that frame the image on narrower viewports.
         const STAR_COUNT = 42;
         const STAR_INSET_LEFT  = 14;  // % from left edge
-        const STAR_INSET_RIGHT = 86;  // % from left edge (14% inset on right)
+        const STAR_INSET_RIGHT = 80;  // % from left edge (20% inset on right —
+                                       // torn-paper edge is more ragged on the
+                                       // right than the left, needs more cushion)
         const starFrag = document.createDocumentFragment();
         for (let i = 0; i < STAR_COUNT; i++) {
             const s = document.createElement('span');
