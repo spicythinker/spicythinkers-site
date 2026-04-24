@@ -1033,6 +1033,11 @@
         //   Clouds (nearest): translate upward faster than stars for depth.
         const STAR_RATE  = -0.10;
         const CLOUD_RATE = -0.55;
+        // Stars fade out between these two scroll-progress thresholds so they
+        // disappear as the backdrop pans from nebula into the cloud band —
+        // "stop just above midway in the cloud region".
+        const STAR_FADE_START = 0.05; // still full-opacity before this
+        const STAR_FADE_END   = 0.30; // fully gone by this point
         const body = document.body;
 
         let ticking = false;
@@ -1048,6 +1053,14 @@
             body.style.setProperty('--bg-y', (-progress * panRange).toFixed(1) + 'px');
             starsLayer.style.transform  = 'translate3d(0, ' + (y * STAR_RATE).toFixed(1)  + 'px, 0)';
             cloudsLayer.style.transform = 'translate3d(0, ' + (y * CLOUD_RATE).toFixed(1) + 'px, 0)';
+
+            // Fade stars out as we scroll into the cloud region of the backdrop.
+            const fadeSpan = STAR_FADE_END - STAR_FADE_START;
+            const starOpacity = fadeSpan > 0
+                ? Math.min(1, Math.max(0, 1 - (progress - STAR_FADE_START) / fadeSpan))
+                : 1;
+            starsLayer.style.opacity = starOpacity.toFixed(3);
+
             ticking = false;
         }
 
