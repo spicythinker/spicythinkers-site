@@ -359,11 +359,11 @@
         }
 
         .hero h1 span {
-            background: linear-gradient(135deg, #ffe33d 0%, #ff9a1f 45%, #ff4d8f 100%);
+            background: linear-gradient(135deg, #fff000 0%, #ff8800 50%, #ff2e8a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+            text-shadow: none; /* override h1's dark shadow so gradient reads clean */
         }
 
         .hero p {
