@@ -148,7 +148,7 @@
             left: 0;
             width: 100vmax;
             height: 100vmax;
-            background: url('/background.png') center center / 100% 100% no-repeat, #0b0b1f;
+            background: url('/background-clean.png') center center / 100% 100% no-repeat, #0b0b1f;
             z-index: -2;
             pointer-events: none;
             will-change: transform;
@@ -200,17 +200,29 @@
             50% { opacity: 0.9; }
         }
 
+        /* Real cloud cutouts extracted from the backdrop, floated over the scene
+           and parallaxed at CLOUD_RATE. Each cloud has its own class so the PNG
+           and aspect ratio stay correct; width is viewport-relative so they
+           scale with the scene. */
         .parallax-layer .cloud {
             position: absolute;
-            width: 180px;
-            height: 48px;
-            background: radial-gradient(ellipse at center, rgba(255, 223, 190, 0.18) 0%, rgba(255, 223, 190, 0) 70%);
-            filter: blur(6px);
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
             pointer-events: none;
+            will-change: transform;
         }
 
-        .parallax-layer .cloud.warm {
-            background: radial-gradient(ellipse at center, rgba(255, 163, 120, 0.22) 0%, rgba(255, 163, 120, 0) 70%);
+        .parallax-layer .cloud-1 {
+            background-image: url('/cloud1.png');
+            width: 28vw;
+            aspect-ratio: 339 / 127;
+        }
+
+        .parallax-layer .cloud-2 {
+            background-image: url('/cloud2.png');
+            width: 18vw;
+            aspect-ratio: 224 / 59;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1002,21 +1014,18 @@
         }
         starsLayer.appendChild(starFrag);
 
-        // Populate clouds (middle band — where the sunset sits in the image)
+        // Real cloud cutouts (cloud1.png, cloud2.png) positioned in the cloud band
+        // of the viewport. Tweak top/left here to re-stage the scene.
         const clouds = [
-            { top: '28%', left: '-8%', scale: 1.1, warm: true,  delay: 0 },
-            { top: '40%', left: '58%', scale: 1.4, warm: true,  delay: 0 },
-            { top: '22%', left: '72%', scale: 0.9, warm: false, delay: 0 },
-            { top: '48%', left: '12%', scale: 1.2, warm: false, delay: 0 },
-            { top: '36%', left: '35%', scale: 1.0, warm: true,  delay: 0 },
+            { cls: 'cloud-1', top: '38%', left: '-4%'  },
+            { cls: 'cloud-2', top: '50%', left: '68%' },
         ];
         const cloudFrag = document.createDocumentFragment();
         clouds.forEach(c => {
             const el = document.createElement('span');
-            el.className = 'cloud' + (c.warm ? ' warm' : '');
+            el.className = 'cloud ' + c.cls;
             el.style.top = c.top;
             el.style.left = c.left;
-            el.style.transform = 'scale(' + c.scale + ')';
             cloudFrag.appendChild(el);
         });
         cloudsLayer.appendChild(cloudFrag);
