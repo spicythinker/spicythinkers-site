@@ -225,39 +225,30 @@
             aspect-ratio: 224 / 59;
         }
 
-        /* Register --dx / --dy as typed <length>s so they interpolate
-           smoothly inside transform:translate3d() keyframes. Without this
-           the browser treats them as opaque strings and the drift either
-           pops between endpoints or doesn't animate at all. */
-        @property --dx {
-            syntax: '<length>';
-            inherits: false;
-            initial-value: 0px;
-        }
-        @property --dy {
-            syntax: '<length>';
-            inherits: false;
-            initial-value: 0px;
-        }
-
-        /* Fireflies scene — a dedicated fixed layer that is NOT a
-           .parallax-layer: it never translates on scroll, only its opacity
-           fades in late so the glow appears over the village. Sits above
-           the backdrop, below content. */
+        /* Fireflies scene — a 100vmax × 100vmax container that MOVES WITH
+           the backdrop (same --bg-y transform), so fireflies and window
+           lights stay GLUED to the village instead of sliding across it
+           like they were before. Never shares styles with .parallax-layer.
+           Opacity fades in late so the swarm only appears over the
+           settled village. */
         .fireflies-scene {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100vmax;
+            height: 100vmax;
             pointer-events: none;
             z-index: -1;
-            will-change: opacity;
+            will-change: transform, opacity;
+            transform: translate3d(0, var(--bg-y, 0px), 0);
             opacity: 0;
         }
 
-        /* Fireflies — warm amber pulses over the village at the bottom of
-           the scroll. Each firefly drifts along a random vector (--dx/--dy)
-           and pulses its opacity; the whole scene is faded IN only at the
-           end of scroll so the glow reads against the village rather than
-           washing over mid-sky. */
+        /* Fireflies — warm amber pulses glued to the village band of the
+           backdrop. Each firefly picks one of 8 hard-coded drift keyframes
+           (no CSS custom-properties inside transform — that technique
+           silently fails on some browsers). JS sets animation shorthand
+           per element to combine a random drift variant with the pulse. */
         .firefly {
             position: absolute;
             width: 3px;
@@ -269,19 +260,19 @@
                 0 0 14px 3px rgba(255, 200, 80, 0.55),
                 0 0 26px 6px rgba(255, 180, 60, 0.25);
             will-change: transform, opacity;
-            animation:
-                firefly-drift var(--drift-dur, 9s) ease-in-out infinite alternate,
-                firefly-pulse var(--pulse-dur, 2.6s) ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
         }
         .firefly.big {
             width: 4px;
             height: 4px;
         }
-        @keyframes firefly-drift {
-            from { transform: translate3d(0, 0, 0); }
-            to   { transform: translate3d(var(--dx, 30px), var(--dy, 10px), 0); }
-        }
+        @keyframes firefly-drift-1 { from { transform: translate3d(0,0,0); }   to { transform: translate3d( 30px, -8px, 0); } }
+        @keyframes firefly-drift-2 { from { transform: translate3d(0,0,0); }   to { transform: translate3d(-28px,  9px, 0); } }
+        @keyframes firefly-drift-3 { from { transform: translate3d(0,0,0); }   to { transform: translate3d( 36px,  6px, 0); } }
+        @keyframes firefly-drift-4 { from { transform: translate3d(0,0,0); }   to { transform: translate3d(-32px, -6px, 0); } }
+        @keyframes firefly-drift-5 { from { transform: translate3d(0,0,0); }   to { transform: translate3d( 22px,-11px, 0); } }
+        @keyframes firefly-drift-6 { from { transform: translate3d(0,0,0); }   to { transform: translate3d(-20px,  8px, 0); } }
+        @keyframes firefly-drift-7 { from { transform: translate3d(0,0,0); }   to { transform: translate3d( 26px, 12px, 0); } }
+        @keyframes firefly-drift-8 { from { transform: translate3d(0,0,0); }   to { transform: translate3d(-34px, -4px, 0); } }
         @keyframes firefly-pulse {
             0%, 100% { opacity: 0.15; }
             50%      { opacity: 1; }
@@ -312,7 +303,7 @@
            upper-right sky every ~18s. Non-parallax, purely decorative. */
         .shooting-star {
             position: fixed;
-            top: 12%;
+            top: 8%;
             left: 8vw;
             width: 140px;
             height: 2px;
@@ -322,7 +313,7 @@
                 rgba(255, 255, 255, 0) 100%);
             border-radius: 2px;
             opacity: 0;
-            transform: translate3d(0, 0, 0) rotate(22deg);
+            transform: translate3d(0, 0, 0) rotate(12deg);
             transform-origin: left center;
             z-index: -2;
             pointer-events: none;
@@ -332,34 +323,37 @@
             filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
         }
         /* IMPORTANT: the translate path must match the rotation angle or
-           the star appears to slide laterally (tail perpendicular to
-           motion). Using the SAME unit on both axes keeps the ratio
-           aspect-ratio-independent. 22vw / 55vw = 0.4 ≈ tan(22°), so the
-           travel vector aligns with the 22° rotation of the streak bar. */
+           the star appears to slide laterally. Same unit on both axes.
+           Full-length streak (55vw) with a SHALLOW angle (12°) and start
+           near the top (top:8%) so the tail never dips past ~23% of the
+           viewport — the streak stays firmly in the upper sky band,
+           well above the mountain silhouette below.
+           12vw / 55vw ≈ 0.218 ≈ tan(12.3°). */
         @keyframes shoot {
-            0%   { transform: translate3d(0, 0, 0) rotate(22deg);       opacity: 0; }
+            0%   { transform: translate3d(0, 0, 0) rotate(12deg);       opacity: 0; }
             3%   { opacity: calc(var(--star-vis, 1) * 0.95); }
-            7%   { transform: translate3d(55vw, 22vw, 0) rotate(22deg); opacity: 0; }
-            100% { transform: translate3d(55vw, 22vw, 0) rotate(22deg); opacity: 0; }
+            7%   { transform: translate3d(55vw, 12vw, 0) rotate(12deg); opacity: 0; }
+            100% { transform: translate3d(55vw, 12vw, 0) rotate(12deg); opacity: 0; }
         }
 
         /* Mountain mist — an elongated, heavily blurred wisp that pans
-           slowly across the mid-band of the viewport. Opacity is driven
-           by JS so it only appears while the mountains are in view.
-           Sits at z:-1 so it layers ABOVE the backdrop and reads clearly. */
+           slowly across the mid-band of the viewport. Pushed to z:1 so
+           it layers ABOVE everything (including the parchment card
+           backgrounds that would otherwise cover it at mid-scroll).
+           Very low peak alpha so text below stays legible through it. */
         .mountain-mist {
             position: fixed;
-            left: -25vw;
-            top: 48%;
+            left: -20vw;
+            top: 42%;
             width: 95vw;
-            height: 20vh;
+            height: 28vh;
             background: radial-gradient(ellipse at center,
-                rgba(255, 255, 255, 0.38) 0%,
-                rgba(255, 255, 255, 0.18) 45%,
-                transparent 72%);
-            filter: blur(12px);
+                rgba(230, 235, 245, 0.55) 0%,
+                rgba(230, 235, 245, 0.25) 45%,
+                transparent 75%);
+            filter: blur(14px);
             opacity: 0;
-            z-index: -1;
+            z-index: 1;
             pointer-events: none;
             will-change: transform, opacity;
             animation: mist-drift 60s ease-in-out infinite alternate;
@@ -1258,49 +1252,51 @@
         });
         cloudsLayer.appendChild(cloudFrag);
 
-        // Fireflies — clustered in the lower band of the viewport so they
-        // hover over the village at max scroll. Drift is TIGHT and mostly
-        // HORIZONTAL with a balanced +/- vertical component, so they
-        // flutter in place rather than rising (the old upward bias read
-        // like scroll-parallax). Pure CSS animation — the fireflies layer
-        // is NEVER transformed on scroll, only its opacity fades IN as the
-        // village comes into view.
+        // Fireflies — positioned at the VILLAGE BAND of the backdrop (in
+        // 100vmax scene coords). Because .fireflies-scene moves WITH the
+        // backdrop's --bg-y transform, fireflies stay GLUED to the village
+        // rather than sliding over it with scroll. Drift + pulse come from
+        // hard-coded keyframe variants (drift-1..drift-8) so the animation
+        // works in every browser, including ones that can't animate CSS
+        // custom properties inside transform().
         if (firefliesLayer) {
-            const FIREFLY_COUNT = 16;
+            const FIREFLY_COUNT = 18;
             const fireflyFrag = document.createDocumentFragment();
             for (let i = 0; i < FIREFLY_COUNT; i++) {
                 const f = document.createElement('span');
                 f.className = 'firefly' + (Math.random() < 0.3 ? ' big' : '');
-                // Inside the inner page (avoid torn edges), lower third.
-                f.style.left = (12 + Math.random() * 76).toFixed(2) + '%';
-                f.style.top  = (66 + Math.random() * 26).toFixed(2) + '%';
-                // Tight hovering: horizontal range ±35px, vertical ±12px,
-                // balanced around zero so they don't trend upward.
-                f.style.setProperty('--dx', ((Math.random() - 0.5) * 70).toFixed(0) + 'px');
-                f.style.setProperty('--dy', ((Math.random() - 0.5) * 24).toFixed(0) + 'px');
-                f.style.setProperty('--drift-dur', (9 + Math.random() * 8).toFixed(2) + 's');
-                f.style.setProperty('--pulse-dur', (2.0 + Math.random() * 2.4).toFixed(2) + 's');
-                // Negative delay so each firefly enters mid-cycle, staggered.
-                f.style.setProperty('--delay', (Math.random() * -6).toFixed(2) + 's');
+                // Village band inside the 100vmax scene. Avoid torn edges.
+                f.style.left = (18 + Math.random() * 64).toFixed(2) + '%';
+                f.style.top  = (86 + Math.random() * 10).toFixed(2) + '%';
+                // Pick one of 8 hardcoded drift keyframes at random.
+                const variant  = 1 + Math.floor(Math.random() * 8);
+                const driftDur = (9 + Math.random() * 8).toFixed(2);
+                const pulseDur = (2.0 + Math.random() * 2.4).toFixed(2);
+                const delay    = (Math.random() * -6).toFixed(2);
+                f.style.animation =
+                    'firefly-drift-' + variant + ' ' + driftDur + 's ease-in-out infinite alternate, ' +
+                    'firefly-pulse ' + pulseDur + 's ease-in-out infinite';
+                // Same delay for both (comma-listed for the two animations).
+                f.style.animationDelay = delay + 's, ' + delay + 's';
                 fireflyFrag.appendChild(f);
             }
 
-            // Village window lights — tiny pulsing amber squares placed at
-            // approximate window positions in the backdrop village band.
-            // These are ESTIMATES — send me tweaks if any land on a wall
-            // instead of a window. Positions are % of the fixed parallax
-            // layer (viewport coords), so they line up when the backdrop
-            // has panned to max-scroll with the village at the bottom.
+            // Village window lights — amber pulses placed at approximate
+            // window positions in the backdrop village band. Coords are
+            // % of the 100vmax scene (so they track the village as it
+            // pans into view). ESTIMATES — send me tweaks if any land
+            // off a window.
             const WINDOW_POSITIONS = [
-                { left: '28%', top: '84%' },
-                { left: '32%', top: '81%' },
-                { left: '37%', top: '86%' },
-                { left: '44%', top: '83%' },
-                { left: '49%', top: '80%' },
-                { left: '55%', top: '85%' },
-                { left: '61%', top: '82%' },
-                { left: '66%', top: '86%' },
-                { left: '72%', top: '84%' },
+                { left: '30%', top: '92%' },
+                { left: '34%', top: '90%' },
+                { left: '38%', top: '93%' },
+                { left: '43%', top: '91%' },
+                { left: '47%', top: '89%' },
+                { left: '52%', top: '92%' },
+                { left: '57%', top: '90%' },
+                { left: '62%', top: '93%' },
+                { left: '67%', top: '91%' },
+                { left: '72%', top: '92%' },
             ];
             WINDOW_POSITIONS.forEach(p => {
                 const w = document.createElement('span');
@@ -1340,10 +1336,10 @@
         const FIREFLY_FADE_END   = 0.95;
         // Mountain mist fades IN during mid-scroll (mountains in view) and
         // OUT again as the backdrop pans toward the village.
-        const MIST_FADE_IN_START  = 0.32;
-        const MIST_FADE_IN_END    = 0.48;
-        const MIST_FADE_OUT_START = 0.72;
-        const MIST_FADE_OUT_END   = 0.85;
+        const MIST_FADE_IN_START  = 0.20;
+        const MIST_FADE_IN_END    = 0.42;
+        const MIST_FADE_OUT_START = 0.78;
+        const MIST_FADE_OUT_END   = 0.92;
         const body = document.body;
 
         let ticking = false;
