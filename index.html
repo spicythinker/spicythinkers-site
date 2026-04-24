@@ -1028,24 +1028,42 @@
         // the viewport all the way down to the village at max scroll.
         // Horizontal center (left:30% + 8vw half-width ≈ 38% viewport) lands
         // in the gap between the Math Adventure and Speed Reader cards.
+        // Cloud orchestration for "relay race" style motion:
+        //   stars  full  0.00 → 0.05  ·  fade out 0.05 → 0.30
+        //   cloud1 fade in 0.05 → 0.20  ·  full 0.20 → 0.30  ·  fade out 0.30 → 0.45
+        //   cloud2 fade in 0.30 → 0.45  ·  full 0.45 → 1.00
+        // so there's always one primary element in motion, with gentle overlap.
+        //
+        // cloud-1 uses rate-based parallax (translate per-pixel scroll).
+        // cloud-2 uses PROGRESS-based interpolation (startTopPct → endTopPct
+        //   across scroll progress 0→1) so its landing is independent of the
+        //   page's absolute scroll height — guarantees it reaches endTopPct
+        //   at max scroll regardless of how tall the document is.
         const clouds = [
-            { cls: 'cloud-1', top: '57%',  left: '55%', rate: -0.45 },
-            // cloud-2 timing anchored to page landmarks:
-            //   enters viewport around scroll=1V  (Tools cards scrolling by),
-            //   at viewport mid by scroll≈2.3V    (between "Built for Bright
-            //   Minds" heading and the "Buy Me a Coffee" section).
-            // Two-point linear solution: top=138%, rate=-0.38.
-            { cls: 'cloud-2', top: '138%', left: '42%', rate: -0.38 },
+            { cls: 'cloud-1', top: '57%', left: '55%',
+              rate: -0.45,
+              fadeIn: [0.05, 0.20], fadeOut: [0.30, 0.45] },
+            { cls: 'cloud-2', left: '42%',
+              startTopPct: 110, endTopPct: 80,
+              fadeIn: [0.30, 0.45] },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
         clouds.forEach(c => {
             const el = document.createElement('span');
             el.className = 'cloud ' + c.cls;
-            el.style.top = c.top;
             el.style.left = c.left;
+            el.style.top = c.top !== undefined ? c.top : (c.startTopPct + '%');
+            el.style.opacity = '0'; // start hidden; scroll handler will set it
             cloudFrag.appendChild(el);
-            cloudEls.push({ el: el, rate: c.rate });
+            cloudEls.push({
+                el: el,
+                rate: c.rate,
+                startTopPct: c.startTopPct,
+                endTopPct: c.endTopPct,
+                fadeIn: c.fadeIn,
+                fadeOut: c.fadeOut
+            });
         });
         cloudsLayer.appendChild(cloudFrag);
 
@@ -1081,11 +1099,6 @@
             const panRange = Math.max(0, containerH - window.innerHeight);
             body.style.setProperty('--bg-y', (-progress * panRange).toFixed(1) + 'px');
             starsLayer.style.transform = 'translate3d(0, ' + (y * STAR_RATE).toFixed(1) + 'px, 0)';
-            // Each cloud translates at its own rate so they drift independently.
-            for (let i = 0; i < cloudEls.length; i++) {
-                const c = cloudEls[i];
-                c.el.style.transform = 'translate3d(0, ' + (y * c.rate).toFixed(1) + 'px, 0)';
-            }
 
             // Fade stars out as we scroll into the cloud region of the backdrop.
             const fadeSpan = STAR_FADE_END - STAR_FADE_START;
@@ -1093,6 +1106,34 @@
                 ? Math.min(1, Math.max(0, 1 - (progress - STAR_FADE_START) / fadeSpan))
                 : 1;
             starsLayer.style.opacity = starOpacity.toFixed(3);
+
+            // Per-cloud transform + cross-fade opacity.
+            const vh = window.innerHeight;
+            for (let i = 0; i < cloudEls.length; i++) {
+                const c = cloudEls[i];
+
+                // Position: rate-based (translate per scroll px) or progress-
+                // based (linear interp between startTopPct and endTopPct).
+                let ty;
+                if (c.rate !== undefined) {
+                    ty = y * c.rate;
+                } else {
+                    ty = (c.endTopPct - c.startTopPct) * vh / 100 * progress;
+                }
+                c.el.style.transform = 'translate3d(0, ' + ty.toFixed(1) + 'px, 0)';
+
+                // Opacity: min of fadeIn ramp and inverse fadeOut ramp.
+                let op = 1;
+                if (c.fadeIn) {
+                    const a = c.fadeIn[0], b = c.fadeIn[1];
+                    op = Math.min(op, Math.min(1, Math.max(0, (progress - a) / (b - a))));
+                }
+                if (c.fadeOut) {
+                    const a = c.fadeOut[0], b = c.fadeOut[1];
+                    op = Math.min(op, 1 - Math.min(1, Math.max(0, (progress - a) / (b - a))));
+                }
+                c.el.style.opacity = op.toFixed(3);
+            }
 
             ticking = false;
         }
