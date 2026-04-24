@@ -215,13 +215,13 @@
 
         .parallax-layer .cloud-1 {
             background-image: url('/cloud1.png');
-            width: 28vw;
+            width: 22vw;
             aspect-ratio: 339 / 127;
         }
 
         .parallax-layer .cloud-2 {
             background-image: url('/cloud2.png');
-            width: 18vw;
+            width: 16vw;
             aspect-ratio: 224 / 59;
         }
 
@@ -1014,19 +1014,24 @@
         }
         starsLayer.appendChild(starFrag);
 
-        // Real cloud cutouts (cloud1.png, cloud2.png) positioned in the cloud band
-        // of the viewport. Tweak top/left here to re-stage the scene.
+        // Real cloud cutouts (cloud1.png, cloud2.png) positioned inside the inner
+        // page area — away from the torn paper edges — and staged at the empty
+        // cloud spots in the cleaned backdrop. Each cloud carries its own
+        // parallax rate so they drift at slightly different speeds from each
+        // other and from the stars.
         const clouds = [
-            { cls: 'cloud-1', top: '38%', left: '-4%'  },
-            { cls: 'cloud-2', top: '50%', left: '68%' },
+            { cls: 'cloud-1', top: '62%', left: '10%', rate: -0.45 },
+            { cls: 'cloud-2', top: '70%', left: '58%', rate: -0.70 },
         ];
         const cloudFrag = document.createDocumentFragment();
+        const cloudEls = [];
         clouds.forEach(c => {
             const el = document.createElement('span');
             el.className = 'cloud ' + c.cls;
             el.style.top = c.top;
             el.style.left = c.left;
             cloudFrag.appendChild(el);
+            cloudEls.push({ el: el, rate: c.rate });
         });
         cloudsLayer.appendChild(cloudFrag);
 
@@ -1041,7 +1046,8 @@
         //     linearly — regardless of landscape/portrait aspect.
         //   Clouds (nearest): translate upward faster than stars for depth.
         const STAR_RATE  = -0.10;
-        const CLOUD_RATE = -0.55;
+        // Per-cloud rates live on each entry in the `clouds` array above so
+        // the two clouds drift at different speeds from each other.
         // Stars fade out between these two scroll-progress thresholds so they
         // disappear as the backdrop pans from nebula into the cloud band —
         // "stop just above midway in the cloud region".
@@ -1060,8 +1066,12 @@
             const containerH = Math.max(window.innerWidth, window.innerHeight);
             const panRange = Math.max(0, containerH - window.innerHeight);
             body.style.setProperty('--bg-y', (-progress * panRange).toFixed(1) + 'px');
-            starsLayer.style.transform  = 'translate3d(0, ' + (y * STAR_RATE).toFixed(1)  + 'px, 0)';
-            cloudsLayer.style.transform = 'translate3d(0, ' + (y * CLOUD_RATE).toFixed(1) + 'px, 0)';
+            starsLayer.style.transform = 'translate3d(0, ' + (y * STAR_RATE).toFixed(1) + 'px, 0)';
+            // Each cloud translates at its own rate so they drift independently.
+            for (let i = 0; i < cloudEls.length; i++) {
+                const c = cloudEls[i];
+                c.el.style.transform = 'translate3d(0, ' + (y * c.rate).toFixed(1) + 'px, 0)';
+            }
 
             // Fade stars out as we scroll into the cloud region of the backdrop.
             const fadeSpan = STAR_FADE_END - STAR_FADE_START;
