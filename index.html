@@ -136,14 +136,22 @@
             position: relative;
         }
 
-        /* Fantasy scene backdrop — fixed, always visible through translucent sections */
+        /* Fantasy scene backdrop — fixed, but pans slowly via --bg-y on scroll so the
+           nebula → sunset → village zones progressively reveal as the user scrolls.
+           The element is taller than the viewport to give room for vertical travel. */
         body::before {
             content: '';
             position: fixed;
-            inset: 0;
-            background: url('/background.png') center / cover no-repeat, #0b0b1f;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 160vh;
+            background: url('/background.png') center top / cover no-repeat;
+            background-color: #0b0b1f;
             z-index: -2;
             pointer-events: none;
+            will-change: transform;
+            transform: translate3d(0, var(--bg-y, 0px), 0);
         }
 
         /* Soft gradient overlay to help text readability without washing out the scene */
@@ -205,6 +213,9 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+            body::before {
+                transform: none !important;
+            }
             .parallax-layer {
                 transform: none !important;
             }
@@ -996,25 +1007,40 @@
 
         if (prefersReduced) return; // honor user preference — static scene only
 
-        // Scroll-driven parallax. Stars drift slowly (distant), clouds drift faster (nearer).
-        // Both translate upward as you scroll down, giving a sense of forward motion.
-        const STAR_RATE  = -0.12;
-        const CLOUD_RATE = -0.32;
-        let ticking = false;
+        // Scroll-driven parallax. In a proper depth stack, objects farther away move less:
+        //   stars (farthest) < backdrop (middle) < clouds (nearest) < content (1.0).
+        // All layers translate upward as the user scrolls down.
+        // Backdrop is clamped so it never pans further than its extra headroom (60vh here,
+        // since the element is sized to 160vh), preventing a blank strip at the bottom.
+        const STAR_RATE  = -0.10;
+        const BG_RATE    = -0.35;
+        const CLOUD_RATE = -0.55;
+        const body = document.body;
 
+        function maxBgTravel() {
+            // Element is 160vh tall; viewport is 100vh; so 60vh of vertical travel is safe.
+            return window.innerHeight * 0.6;
+        }
+
+        let ticking = false;
         function update() {
             const y = window.scrollY || 0;
+            const bgOffset = Math.max(-maxBgTravel(), y * BG_RATE);
+            body.style.setProperty('--bg-y', bgOffset.toFixed(1) + 'px');
             starsLayer.style.transform  = 'translate3d(0, ' + (y * STAR_RATE).toFixed(1)  + 'px, 0)';
             cloudsLayer.style.transform = 'translate3d(0, ' + (y * CLOUD_RATE).toFixed(1) + 'px, 0)';
             ticking = false;
         }
 
-        window.addEventListener('scroll', function () {
+        function schedule() {
             if (!ticking) {
                 requestAnimationFrame(update);
                 ticking = true;
             }
-        }, { passive: true });
+        }
+
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule, { passive: true });
 
         update();
     })();
