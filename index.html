@@ -1030,10 +1030,12 @@
         // in the gap between the Math Adventure and Speed Reader cards.
         const clouds = [
             { cls: 'cloud-1', top: '57%',  left: '55%', rate: -0.45 },
-            // cloud-2: slow rate (-0.12) lets it linger in the lower viewport
-            // all the way to the village at max scroll. Enters ~progress 0.74
-            // (as the tools cards pass) and ends ~91% viewport (village strip).
-            { cls: 'cloud-2', top: '125%', left: '42%', rate: -0.12 },
+            // cloud-2 timing anchored to page landmarks:
+            //   enters viewport around scroll=1V  (Tools cards scrolling by),
+            //   at viewport mid by scroll≈2.3V    (between "Built for Bright
+            //   Minds" heading and the "Buy Me a Coffee" section).
+            // Two-point linear solution: top=138%, rate=-0.38.
+            { cls: 'cloud-2', top: '138%', left: '42%', rate: -0.38 },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
