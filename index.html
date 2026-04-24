@@ -280,6 +280,15 @@
             height: 100%;
             display: block;
             object-fit: contain; /* guarantee no clipping regardless of aspect ratio */
+            /* Feathered white halo that hugs the logo's alpha silhouette
+               (not a bounding box), matching the torn-page glow on the
+               backdrop and reinforcing the diamond read against darker
+               parts of the scene. Three stacked drop-shadows fade from
+               crisp → soft → atmospheric. */
+            filter:
+                drop-shadow(0 0 6px rgba(255, 255, 255, 0.95))
+                drop-shadow(0 0 16px rgba(255, 255, 255, 0.55))
+                drop-shadow(0 0 34px rgba(255, 255, 255, 0.30));
         }
 
         .brand-mark:hover {
