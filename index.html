@@ -1135,13 +1135,18 @@
         const shootingStar = document.querySelector('.shooting-star');
         if (!starsLayer || !cloudsLayer) return;
 
-        // Populate stars (top ~55% of viewport — the nebula zone)
+        // Populate stars (top ~55% of viewport — the nebula zone).
+        // Horizontal range is INSET from the viewport edges so stars sit
+        // inside the torn-paper image area only, never on the dark
+        // border strips that frame the image on narrower viewports.
         const STAR_COUNT = 42;
+        const STAR_INSET_LEFT  = 8;   // % from left edge
+        const STAR_INSET_RIGHT = 92;  // % from left edge (8% inset on right)
         const starFrag = document.createDocumentFragment();
         for (let i = 0; i < STAR_COUNT; i++) {
             const s = document.createElement('span');
             s.className = 'star' + (Math.random() < 0.25 ? ' big' : '');
-            s.style.left = (Math.random() * 100).toFixed(2) + '%';
+            s.style.left = (STAR_INSET_LEFT + Math.random() * (STAR_INSET_RIGHT - STAR_INSET_LEFT)).toFixed(2) + '%';
             s.style.top = (Math.random() * 55).toFixed(2) + '%';
             s.style.animationDelay = (Math.random() * 3).toFixed(2) + 's';
             s.style.animationDuration = (2.4 + Math.random() * 2).toFixed(2) + 's';
