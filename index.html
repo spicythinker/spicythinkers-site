@@ -1030,7 +1030,10 @@
         // in the gap between the Math Adventure and Speed Reader cards.
         const clouds = [
             { cls: 'cloud-1', top: '57%',  left: '55%', rate: -0.45 },
-            { cls: 'cloud-2', top: '210%', left: '42%', rate: -0.40 },
+            // cloud-2: slow rate (-0.12) lets it linger in the lower viewport
+            // all the way to the village at max scroll. Enters ~progress 0.74
+            // (as the tools cards pass) and ends ~91% viewport (village strip).
+            { cls: 'cloud-2', top: '125%', left: '42%', rate: -0.12 },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
