@@ -136,18 +136,19 @@
             position: relative;
         }
 
-        /* Fantasy scene backdrop — fixed, but pans slowly via --bg-y on scroll so the
-           nebula → sunset → village zones progressively reveal as the user scrolls.
-           The element is taller than the viewport to give room for vertical travel. */
+        /* Fantasy scene backdrop — container is exactly the image aspect (1:1) sized to
+           the viewport's larger dimension, so the image always fits edge-to-edge in the
+           wider axis with no crop or stretch. JS sets --bg-y to translate between 0
+           (top: nebula) and -(containerH - vh) (bottom: village), so the entire scene
+           reveals end-to-end regardless of viewport shape. */
         body::before {
             content: '';
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 160vh;
-            background: url('/background.png') center top / cover no-repeat;
-            background-color: #0b0b1f;
+            width: 100vmax;
+            height: 100vmax;
+            background: url('/background.png') center center / 100% 100% no-repeat, #0b0b1f;
             z-index: -2;
             pointer-events: none;
             will-change: transform;
@@ -214,7 +215,7 @@
 
         @media (prefers-reduced-motion: reduce) {
             body::before {
-                transform: none !important;
+                transform: none !important; /* static top-of-image view */
             }
             .parallax-layer {
                 transform: none !important;
@@ -1008,26 +1009,29 @@
 
         if (prefersReduced) return; // honor user preference — static scene only
 
-        // Scroll-driven parallax. In a proper depth stack, objects farther away move less:
-        //   stars (farthest) < backdrop (middle) < clouds (nearest) < content (1.0).
-        // All layers translate upward as the user scrolls down.
-        // Backdrop is clamped so it never pans further than its extra headroom (60vh here,
-        // since the element is sized to 160vh), preventing a blank strip at the bottom.
+        // Scroll-driven parallax.
+        //   Stars (farthest): translate upward slowly.
+        //   Backdrop (middle): translate by -progress × panRange, where panRange is the
+        //     difference between the backdrop container height (max(100vw, 100vh)) and the
+        //     viewport height. So at scroll=0 we see the top of the image (stars), at
+        //     scroll=max we see the bottom (village), and everything in between reveals
+        //     linearly — regardless of landscape/portrait aspect.
+        //   Clouds (nearest): translate upward faster than stars for depth.
         const STAR_RATE  = -0.10;
-        const BG_RATE    = -0.35;
         const CLOUD_RATE = -0.55;
         const body = document.body;
-
-        function maxBgTravel() {
-            // Element is 160vh tall; viewport is 100vh; so 60vh of vertical travel is safe.
-            return window.innerHeight * 0.6;
-        }
 
         let ticking = false;
         function update() {
             const y = window.scrollY || 0;
-            const bgOffset = Math.max(-maxBgTravel(), y * BG_RATE);
-            body.style.setProperty('--bg-y', bgOffset.toFixed(1) + 'px');
+            const docH = (document.documentElement.scrollHeight || document.body.scrollHeight) - window.innerHeight;
+            const progress = docH > 0 ? Math.min(1, Math.max(0, y / docH)) : 0;
+            // Backdrop container is a 1:1 square sized to 100vmax. Pan range is the
+            // difference between its height and the viewport height, so the image
+            // reveals end-to-end (or 0 if the viewport is taller than it is wide).
+            const containerH = Math.max(window.innerWidth, window.innerHeight);
+            const panRange = Math.max(0, containerH - window.innerHeight);
+            body.style.setProperty('--bg-y', (-progress * panRange).toFixed(1) + 'px');
             starsLayer.style.transform  = 'translate3d(0, ' + (y * STAR_RATE).toFixed(1)  + 'px, 0)';
             cloudsLayer.style.transform = 'translate3d(0, ' + (y * CLOUD_RATE).toFixed(1) + 'px, 0)';
             ticking = false;
