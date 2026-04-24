@@ -910,10 +910,10 @@
         /* ── MOBILE ── */
         @media (max-width: 640px) {
             .brand-mark {
-                width: 220px;
-                height: 220px;
-                top: 10px;
-                left: 10px;
+                width: 140px;
+                height: 140px;
+                top: 8px;
+                left: 8px;
             }
 
             nav .nav-links a:not(.btn-notify) {
@@ -922,6 +922,15 @@
 
             .hero {
                 padding: 64px 20px 60px;
+            }
+        }
+
+        /* Very narrow phones — shrink the logo a bit more so it doesn't
+           crowd the nav buttons or the start of the hero copy. */
+        @media (max-width: 380px) {
+            .brand-mark {
+                width: 110px;
+                height: 110px;
             }
         }
     </style>
