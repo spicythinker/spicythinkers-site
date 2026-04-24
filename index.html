@@ -282,7 +282,7 @@
            upper-right sky every ~18s. Non-parallax, purely decorative. */
         .shooting-star {
             position: fixed;
-            top: 8%;
+            top: 4%;
             left: 8vw;
             width: 140px;
             height: 2px;
@@ -307,19 +307,22 @@
         }
         /* Each keyframe pairs a rotation θ with a translate (dx, dy) so
            atan2(dy, dx) ≈ θ — otherwise the streak would appear to slide
-           laterally (tail not aligned with motion). 12° is shallow enough
-           that the tail never drops below the upper sky band. */
+           laterally (tail not aligned with motion). 5° rotation with
+           dy = 5vw (tan 5° ≈ 0.087, 55*0.087 ≈ 4.8 ≈ 5) keeps the path
+           almost flat. Combined with start top:4%, the tail tip never
+           goes below ~13% of viewport on any aspect ratio — well above
+           the mountain silhouette. */
         @keyframes shoot-right { /* enters from left, travels right */
-            0%   { transform: translate3d(0, 0, 0)       rotate(12deg); opacity: 0; }
+            0%   { transform: translate3d(0, 0, 0)      rotate(5deg);  opacity: 0; }
             3%   { opacity: calc(var(--star-vis, 1) * 0.95); }
-            7%   { transform: translate3d(55vw, 12vw, 0) rotate(12deg); opacity: 0; }
-            100% { transform: translate3d(55vw, 12vw, 0) rotate(12deg); opacity: 0; }
+            7%   { transform: translate3d(55vw, 5vw, 0) rotate(5deg);  opacity: 0; }
+            100% { transform: translate3d(55vw, 5vw, 0) rotate(5deg);  opacity: 0; }
         }
         @keyframes shoot-left {  /* enters from right, travels left */
-            0%   { transform: translate3d(0, 0, 0)        rotate(168deg); opacity: 0; }
+            0%   { transform: translate3d(0, 0, 0)       rotate(175deg); opacity: 0; }
             3%   { opacity: calc(var(--star-vis, 1) * 0.95); }
-            7%   { transform: translate3d(-55vw, 12vw, 0) rotate(168deg); opacity: 0; }
-            100% { transform: translate3d(-55vw, 12vw, 0) rotate(168deg); opacity: 0; }
+            7%   { transform: translate3d(-55vw, 5vw, 0) rotate(175deg); opacity: 0; }
+            100% { transform: translate3d(-55vw, 5vw, 0) rotate(175deg); opacity: 0; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1261,8 +1264,10 @@
                 //   shoot-right: starts at left:-10vw, streaks to +55vw
                 //   shoot-left:  starts at left:110vw, streaks to -55vw
                 shootingStar.style.left = fromLeft ? '-10vw' : '110vw';
-                // Vary vertical entry a bit within the upper sky band.
-                shootingStar.style.top = (5 + Math.random() * 10).toFixed(1) + '%';
+                // Vary vertical entry a tiny bit within the upper-most
+                // sky band only. Combined with the 5° / 5vw shallow path,
+                // the streak's tail never reaches the mountain band.
+                shootingStar.style.top = (3 + Math.random() * 5).toFixed(1) + '%';
             };
             pickShootDirection();
             shootingStar.addEventListener('animationiteration', pickShootDirection);
