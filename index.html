@@ -225,6 +225,40 @@
             aspect-ratio: 224 / 59;
         }
 
+        /* Fireflies — warm amber pulses over the village at the bottom of
+           the scroll. Each firefly drifts along a random vector (--dx/--dy)
+           and pulses its opacity; the whole layer is faded IN only at the
+           end of scroll so the glow reads against the village rather than
+           washing over mid-sky. */
+        .parallax-layer .firefly {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff4b8;
+            border-radius: 50%;
+            box-shadow:
+                0 0 6px 1px rgba(255, 224, 130, 0.95),
+                0 0 14px 3px rgba(255, 200, 80, 0.55),
+                0 0 26px 6px rgba(255, 180, 60, 0.25);
+            will-change: transform, opacity;
+            animation:
+                firefly-drift var(--drift-dur, 9s) ease-in-out infinite alternate,
+                firefly-pulse var(--pulse-dur, 2.6s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+        .parallax-layer .firefly.big {
+            width: 4px;
+            height: 4px;
+        }
+        @keyframes firefly-drift {
+            from { transform: translate3d(0, 0, 0); }
+            to   { transform: translate3d(var(--dx, 40px), var(--dy, -30px), 0); }
+        }
+        @keyframes firefly-pulse {
+            0%, 100% { opacity: 0.15; }
+            50%      { opacity: 1; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             body::before {
                 transform: none !important; /* static top-of-image view */
@@ -234,6 +268,10 @@
             }
             .parallax-layer .star {
                 animation: none;
+            }
+            .parallax-layer .firefly {
+                animation: none;
+                opacity: 0.55;
             }
         }
 
@@ -826,6 +864,10 @@
 <!-- PARALLAX LAYERS (stars + clouds that scroll at different rates over the backdrop) -->
 <div class="parallax-layer" id="parallaxStars" aria-hidden="true"></div>
 <div class="parallax-layer" id="parallaxClouds" aria-hidden="true"></div>
+<!-- Fireflies layer: no parallax transform. Fireflies drift / pulse via pure
+     CSS animation for natural movement. Only the layer's OPACITY is tied to
+     scroll so they appear as the village comes into view. -->
+<div class="parallax-layer" id="parallaxFireflies" aria-hidden="true" style="opacity: 0;"></div>
 
 <!-- BRAND MARK (floats above the nav, fixed in the top-left corner) -->
 <a href="/" class="brand-mark" aria-label="Spicy Thinkers home">
@@ -1007,6 +1049,7 @@
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const starsLayer = document.getElementById('parallaxStars');
         const cloudsLayer = document.getElementById('parallaxClouds');
+        const firefliesLayer = document.getElementById('parallaxFireflies');
         if (!starsLayer || !cloudsLayer) return;
 
         // Populate stars (top ~55% of viewport — the nebula zone)
@@ -1086,6 +1129,34 @@
         });
         cloudsLayer.appendChild(cloudFrag);
 
+        // Fireflies — clustered in the lower band of the viewport so they
+        // hover over the village at max scroll. Each firefly gets a random
+        // drift vector, drift duration, pulse duration and delay so they
+        // don't blink in sync. Pure CSS animation — the fireflies layer
+        // itself is NEVER transformed on scroll, only its opacity fades IN
+        // as the village comes into view.
+        if (firefliesLayer) {
+            const FIREFLY_COUNT = 16;
+            const fireflyFrag = document.createDocumentFragment();
+            for (let i = 0; i < FIREFLY_COUNT; i++) {
+                const f = document.createElement('span');
+                f.className = 'firefly' + (Math.random() < 0.3 ? ' big' : '');
+                // Keep inside the inner page (avoid torn edges) and in the
+                // lower third of viewport where the village lands.
+                f.style.left = (12 + Math.random() * 76).toFixed(2) + '%';
+                f.style.top  = (66 + Math.random() * 26).toFixed(2) + '%';
+                // Natural wandering: short, non-parallel drift vectors.
+                f.style.setProperty('--dx', ((Math.random() - 0.5) * 90).toFixed(0) + 'px');
+                f.style.setProperty('--dy', (-(15 + Math.random() * 45)).toFixed(0) + 'px');
+                f.style.setProperty('--drift-dur', (7 + Math.random() * 7).toFixed(2) + 's');
+                f.style.setProperty('--pulse-dur', (2.0 + Math.random() * 2.4).toFixed(2) + 's');
+                // Negative delay so they enter the loop mid-cycle, staggered.
+                f.style.setProperty('--delay', (Math.random() * -6).toFixed(2) + 's');
+                fireflyFrag.appendChild(f);
+            }
+            firefliesLayer.appendChild(fireflyFrag);
+        }
+
         if (prefersReduced) return; // honor user preference — static scene only
 
         // Scroll-driven parallax.
@@ -1104,6 +1175,11 @@
         // "stop just above midway in the cloud region".
         const STAR_FADE_START = 0.05; // still full-opacity before this
         const STAR_FADE_END   = 0.30; // fully gone by this point
+        // Fireflies fade IN late in the scroll as the village comes into view.
+        // They DO NOT parallax — only their layer opacity is tied to scroll;
+        // their motion is purely from their own CSS drift/pulse animations.
+        const FIREFLY_FADE_START = 0.72;
+        const FIREFLY_FADE_END   = 0.92;
         const body = document.body;
 
         let ticking = false;
@@ -1125,6 +1201,15 @@
                 ? Math.min(1, Math.max(0, 1 - (progress - STAR_FADE_START) / fadeSpan))
                 : 1;
             starsLayer.style.opacity = starOpacity.toFixed(3);
+
+            // Fireflies: fade IN only (no transform — they wander via CSS).
+            if (firefliesLayer) {
+                const ffSpan = FIREFLY_FADE_END - FIREFLY_FADE_START;
+                const ffOpacity = ffSpan > 0
+                    ? Math.min(1, Math.max(0, (progress - FIREFLY_FADE_START) / ffSpan))
+                    : 0;
+                firefliesLayer.style.opacity = ffOpacity.toFixed(3);
+            }
 
             // Per-cloud transform + cross-fade opacity.
             const vh = window.innerHeight;
