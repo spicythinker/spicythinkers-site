@@ -1019,15 +1019,18 @@
         // cloud spots in the cleaned backdrop. Each cloud carries its own
         // parallax rate so they drift at slightly different speeds from each
         // other and from the stars.
-        // cloud-1 (larger) starts in the blank space just right & under the
-        // "See Our Tools" button in the hero at scroll=0.
-        // cloud-2 (smaller) starts below the fold so it drifts UP into the
-        // blank patch on the left side of the features section as the user
-        // scrolls down — hitting the gap around the "Designed for Every Kind"
-        // heading.
+        // cloud-1 (larger) sits above the "See Our Tools" button in the hero.
+        // cloud-2 (smaller) is staged far below the fold so it's hidden at
+        // scroll=0, stays hidden while the tools cards are on screen (card
+        // parchment backgrounds cover the parallax layer at z-index -2
+        // anyway), and drifts UP into view AFTER the cards pass. Rate is
+        // deliberately slow (-0.40) so the cloud lingers near the bottom of
+        // the viewport all the way down to the village at max scroll.
+        // Horizontal center (left:30% + 8vw half-width ≈ 38% viewport) lands
+        // in the gap between the Math Adventure and Speed Reader cards.
         const clouds = [
-            { cls: 'cloud-1', top: '72%',  left: '55%', rate: -0.45 },
-            { cls: 'cloud-2', top: '100%', left: '18%', rate: -0.70 },
+            { cls: 'cloud-1', top: '57%',  left: '55%', rate: -0.45 },
+            { cls: 'cloud-2', top: '180%', left: '30%', rate: -0.40 },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
