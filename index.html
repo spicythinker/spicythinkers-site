@@ -589,12 +589,24 @@
         /* ── CTA / SIGNUP ── */
         .cta-section {
             text-align: center;
-            background: linear-gradient(135deg, rgba(26, 26, 46, 0.82) 0%, rgba(45, 27, 105, 0.82) 100%);
+            background: transparent;
             color: white;
             border-radius: 0;
             padding: 80px 24px;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+        }
+
+        /* The actual tinted card that sits around the CTA text/form — scoped to content
+           width so the village behind stays visible on both sides. */
+        .cta-card {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 40px 32px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.45) 0%, rgba(45, 27, 105, 0.45) 100%);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
         }
 
         .cta-section h2 {
@@ -948,15 +960,17 @@
 
 <!-- CTA -->
 <section id="signup" class="cta-section">
-    <h2>Be the First to Play</h2>
-    <p>Join the waitlist and we'll let you know when Spicy Thinkers is ready for your family or classroom.</p>
-    <form class="signup-form" id="signupForm" action="https://spicythinkers.us10.list-manage.com/subscribe/post?u=0f4fb390a586e759e2d9c0fc0&amp;id=3c15174eb6&amp;f_id=00899ce3f0" method="post" target="_blank">
-        <input type="email" name="EMAIL" placeholder="Your email address" required>
-        <!-- Bot signup prevention -->
-        <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_0f4fb390a586e759e2d9c0fc0_3c15174eb6" tabindex="-1" value=""></div>
-        <button type="submit">Join Waitlist</button>
-    </form>
-    <div class="signup-note">No spam, ever. Unsubscribe anytime.</div>
+    <div class="cta-card">
+        <h2>Be the First to Play</h2>
+        <p>Join the waitlist and we'll let you know when Spicy Thinkers is ready for your family or classroom.</p>
+        <form class="signup-form" id="signupForm" action="https://spicythinkers.us10.list-manage.com/subscribe/post?u=0f4fb390a586e759e2d9c0fc0&amp;id=3c15174eb6&amp;f_id=00899ce3f0" method="post" target="_blank">
+            <input type="email" name="EMAIL" placeholder="Your email address" required>
+            <!-- Bot signup prevention -->
+            <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_0f4fb390a586e759e2d9c0fc0_3c15174eb6" tabindex="-1" value=""></div>
+            <button type="submit">Join Waitlist</button>
+        </form>
+        <div class="signup-note">No spam, ever. Unsubscribe anytime.</div>
+    </div>
 </section>
 
 <!-- FOOTER -->
