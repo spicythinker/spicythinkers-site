@@ -1028,11 +1028,11 @@
         // the viewport all the way down to the village at max scroll.
         // Horizontal center (left:30% + 8vw half-width ≈ 38% viewport) lands
         // in the gap between the Math Adventure and Speed Reader cards.
-        // Cloud orchestration for "relay race" style motion:
-        //   stars  full  0.00 → 0.05  ·  fade out 0.05 → 0.30
-        //   cloud1 fade in 0.05 → 0.20  ·  full 0.20 → 0.30  ·  fade out 0.30 → 0.45
-        //   cloud2 fade in 0.30 → 0.45  ·  full 0.45 → 1.00
-        // so there's always one primary element in motion, with gentle overlap.
+        // Clouds are fully visible whenever they're in the viewport (no
+        // cross-fade — the user found fades muddy / hard to read). Visibility
+        // overlap comes purely from their positions crossing paths during
+        // scroll: cloud-1 drifts up and exits the top around the same time
+        // cloud-2 enters from the bottom.
         //
         // cloud-1 uses rate-based parallax (translate per-pixel scroll).
         // cloud-2 uses PROGRESS-based interpolation (startTopPct → endTopPct
@@ -1040,12 +1040,13 @@
         //   page's absolute scroll height — guarantees it reaches endTopPct
         //   at max scroll regardless of how tall the document is.
         const clouds = [
-            { cls: 'cloud-1', top: '57%', left: '55%',
-              rate: -0.45,
-              fadeIn: [0.05, 0.20], fadeOut: [0.30, 0.45] },
-            { cls: 'cloud-2', left: '42%',
-              startTopPct: 110, endTopPct: 80,
-              fadeIn: [0.30, 0.45] },
+            { cls: 'cloud-1', top: '57%', left: '55%', rate: -0.45 },
+            // left:30% → cloud horizontal center at ~38% (in the gap between
+            //   the Math Adventure and Speed Reader cards, left of screen center).
+            // startTopPct 105 → entry at progress ~0.19 (hero scrolling off).
+            // endTopPct   78  → lands near village strip at max scroll.
+            { cls: 'cloud-2', left: '30%',
+              startTopPct: 105, endTopPct: 78 },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
@@ -1054,7 +1055,6 @@
             el.className = 'cloud ' + c.cls;
             el.style.left = c.left;
             el.style.top = c.top !== undefined ? c.top : (c.startTopPct + '%');
-            el.style.opacity = '0'; // start hidden; scroll handler will set it
             cloudFrag.appendChild(el);
             cloudEls.push({
                 el: el,
