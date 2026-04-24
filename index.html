@@ -1020,12 +1020,14 @@
         // parallax rate so they drift at slightly different speeds from each
         // other and from the stars.
         // cloud-1 (larger) starts in the blank space just right & under the
-        // "See Our Tools" button in the hero. cloud-2 (smaller) starts on the
-        // left, tucked alongside the large upward-curving static cloud painted
-        // into the backdrop.
+        // "See Our Tools" button in the hero at scroll=0.
+        // cloud-2 (smaller) starts below the fold so it drifts UP into the
+        // blank patch on the left side of the features section as the user
+        // scrolls down — hitting the gap around the "Designed for Every Kind"
+        // heading.
         const clouds = [
-            { cls: 'cloud-1', top: '72%', left: '55%', rate: -0.45 },
-            { cls: 'cloud-2', top: '62%', left: '12%', rate: -0.70 },
+            { cls: 'cloud-1', top: '72%',  left: '55%', rate: -0.45 },
+            { cls: 'cloud-2', top: '100%', left: '18%', rate: -0.70 },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
