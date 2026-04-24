@@ -1019,9 +1019,13 @@
         // cloud spots in the cleaned backdrop. Each cloud carries its own
         // parallax rate so they drift at slightly different speeds from each
         // other and from the stars.
+        // cloud-1 (larger) starts in the blank space just right & under the
+        // "See Our Tools" button in the hero. cloud-2 (smaller) starts on the
+        // left, tucked alongside the large upward-curving static cloud painted
+        // into the backdrop.
         const clouds = [
-            { cls: 'cloud-1', top: '62%', left: '10%', rate: -0.45 },
-            { cls: 'cloud-2', top: '70%', left: '58%', rate: -0.70 },
+            { cls: 'cloud-1', top: '72%', left: '55%', rate: -0.45 },
+            { cls: 'cloud-2', top: '62%', left: '12%', rate: -0.70 },
         ];
         const cloudFrag = document.createDocumentFragment();
         const cloudEls = [];
